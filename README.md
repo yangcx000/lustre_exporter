@@ -68,4 +68,5 @@ In the event that you encounter issues with specific metrics (especially on vers
 
 ## Contributing
 
-To contribute to this HPE project, you'll need to fill out a CLA (Contributor License Agreement). If you would like to contribute anything more than a bug fix (feature, architectural change, etc), please file an issue and we'll get in touch with you to have you fill out the CLA. 
+You are welcome to contribute to the project.  
+Feel free to create an issue, pull request or just start a discussion.
