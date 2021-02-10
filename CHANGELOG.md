@@ -1,5 +1,11 @@
 # Change Log
 
+## [v2.0.1]() ()
+
+**Closed issues:**
+
+- update golinters runner url in make file [\#2](https://github.com/GSI-HPC/lustre_exporter/issues/2) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
+
 ## [v2.0.0](https://github.com/HewlettPackard/lustre_exporter/tree/v2.0.0) (2017-12-05)
 [Full Changelog](https://github.com/HewlettPackard/lustre_exporter/compare/v1.1.0...v2.0.0)
 

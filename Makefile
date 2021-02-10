@@ -22,7 +22,7 @@ TARGET          ?= lustre_exporter
 PREFIX          ?= $(shell pwd)
 BIN_DIR         ?= $(shell pwd)
 
-all: format vet gometalinter build test
+all: format vet lint build test
 
 test:
 	@echo ">> running tests"
@@ -32,7 +32,7 @@ format:
 	@echo ">> formatting code"
 	@$(GO) fmt $(pkgs)
 
-gometalinter: $(GOLINTER)
+lint: $(GOLINTER)
 	@echo ">> linting code"
 	@$(GOLINTER) run
 
@@ -49,9 +49,9 @@ $(GOPATH)/bin/promu promu:
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
 		$(GO) get -u github.com/prometheus/promu
 
-$(GOPATH)/bin/golangci-lint lint:
+$(GOPATH)/bin/golangci-lint linter:
 	@GOOS=$(shell uname -s | tr A-Z a-z) \
 		GOARCH=$(subst x86_64,amd64,$(patsubst i%86,386,$(shell uname -m))) \
-		$(GO) get -u github.com/golangci/golangci-lint/cmd/golangci-lint
+		$(GO) get -u github.com/golangci/golangci-lint
 
-.PHONY: all format vet build test promu clean $(GOPATH)/bin/promu $(GOPATH)/bin/gometalinter lint
+.PHONY: all format vet lint build test clean promu linter
