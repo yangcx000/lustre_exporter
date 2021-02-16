@@ -13,6 +13,14 @@ go get github.com/GSI-HPC/lustre_exporter
 
 ## Building
 
+For just building the exporter:  
+
+```
+cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
+make build
+```
+
+Building the exporter with code testing, formatting and linting:  
 
 ```
 cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
