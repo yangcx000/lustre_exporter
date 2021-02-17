@@ -1,0 +1,11 @@
+[Unit]
+Description=Prometheus Lustre Exporter
+
+[Service]
+EnvironmentFile=/etc/sysconfig/prometheus-lustre-exporter.options
+ExecStart=/usr/bin/lustre_exporter $OPTIONS
+User=prometheus
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

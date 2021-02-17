@@ -13,19 +13,25 @@ go get github.com/GSI-HPC/lustre_exporter
 
 ## Building
 
-For just building the exporter:  
+### Exporter
+
+For just building the exporter:
 
 ```
 cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
 make build
 ```
 
-Building the exporter with code testing, formatting and linting:  
+Building the exporter with code testing, formatting and linting:
 
 ```
 cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
 make
 ```
+
+### RPM Package Build
+
+[Manual RPM Package Creation](rpm/README.md)
 
 ## Running
 
@@ -76,5 +82,5 @@ In the event that you encounter issues with specific metrics (especially on vers
 
 ## Contributing
 
-You are welcome to contribute to the project.  
+You are welcome to contribute to the project.
 Feel free to create an issue, pull request or just start a discussion.
