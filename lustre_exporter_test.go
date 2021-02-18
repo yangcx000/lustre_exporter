@@ -1044,10 +1044,10 @@ func TestCollector(t *testing.T) {
 		{"lustre_exports_pending_total", "Total number of exports that have been marked pending", counter, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0002"}}, 0, false},
 		{"lustre_exports_pending_total", "Total number of exports that have been marked pending", counter, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0004"}}, 0, false},
 		{"lustre_exports_pending_total", "Total number of exports that have been marked pending", counter, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0006"}}, 0, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0000"}}, 4.7029440512e+10, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0002"}}, 4.7168398336e+10, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0004"}}, 3.1445595136e+10, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0006"}}, 3.1445595136e+10, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0000"}}, 4.7029440512e+10, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0002"}}, 4.7168398336e+10, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0004"}}, 3.1445595136e+10, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0006"}}, 3.1445595136e+10, false},
 		{"lustre_job_read_bytes_total", "The total number of bytes that have been read.", counter, []labelPair{{"component", "ost"}, {"jobid", "23"}, {"target", "lustrefs-OST0000"}}, 0, false},
 		{"lustre_job_read_bytes_total", "The total number of bytes that have been read.", counter, []labelPair{{"component", "ost"}, {"jobid", "24"}, {"target", "lustrefs-OST0000"}}, 0, false},
 		{"lustre_job_read_bytes_total", "The total number of bytes that have been read.", counter, []labelPair{{"component", "ost"}, {"jobid", "25"}, {"target", "lustrefs-OST0000"}}, 0, false},
@@ -1442,7 +1442,7 @@ func TestCollector(t *testing.T) {
 		{"lustre_inodes_maximum", "The maximum number of inodes (objects) the filesystem can hold", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 4.30405522e+08, false},
 		{"lustre_available_kilobytes", "Number of kilobytes readily available in the pool", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 2.241498368e+09, false},
 		{"lustre_inodes_free", "The number of inodes (objects) available", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 4.30405292e+08, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 2.241500416e+09, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 2.241500416e+09, false},
 
 		// MGS Metrics
 		{"lustre_available_kilobytes", "Number of kilobytes readily available in the pool", gauge, []labelPair{{"target", "osd"}, {"component", "mgs"}}, 1.12074688e+09, false},
@@ -1450,7 +1450,7 @@ func TestCollector(t *testing.T) {
 		{"lustre_capacity_kilobytes", "Capacity of the pool in kilobytes", gauge, []labelPair{{"component", "mgs"}, {"target", "osd"}}, 1.12075328e+09, false},
 		{"lustre_inodes_free", "The number of inodes (objects) available", gauge, []labelPair{{"component", "mgs"}, {"target", "osd"}}, 2.31003975e+08, false},
 		{"lustre_inodes_maximum", "The maximum number of inodes (objects) the filesystem can hold", gauge, []labelPair{{"component", "mgs"}, {"target", "osd"}}, 2.31004127e+08, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "mgs"}, {"target", "osd"}}, 1.120748928e+09, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "mgs"}, {"target", "osd"}}, 1.120748928e+09, false},
 
 		// Client Metrics
 		{"lustre_pages_per_rpc_total", "Total number of pages per RPC.", counter, []labelPair{{"component", "client"}, {"operation", "read"}, {"size", "1"}, {"target", "lustrefs-OST0000-osc-ffff88105db50000"}}, 0, false},
@@ -1573,7 +1573,7 @@ func TestCollector(t *testing.T) {
 		{"lustre_rpcs_offset", "Current RPC offset by size.", gauge, []labelPair{{"component", "client"}, {"operation", "write"}, {"size", "8192"}, {"target", "lustrefs-OST0000-osc-ffff88105db50000"}}, 1319, false},
 		{"lustre_rpcs_offset", "Current RPC offset by size.", gauge, []labelPair{{"component", "client"}, {"operation", "write"}, {"size", "8388608"}, {"target", "lustrefs-OST0000-osc-ffff88105db50000"}}, 942102, false},
 		{"lustre_write_bytes_total", "The total number of bytes that have been written.", counter, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 9.381379729408e+13, false},
-		{"lustre_free_kilobytes", "Number of kilobytes allocated to the pool", gauge, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 2.83007085568e+11, false},
+		{"lustre_free_kilobytes", "Number of kilobytes free in the pool", gauge, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 2.83007085568e+11, false},
 		{"lustre_inodes_free", "The number of inodes (objects) available", gauge, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 4.30405267e+08, false},
 		{"lustre_capacity_kilobytes", "Capacity of the pool in kilobytes", gauge, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 2.83010362368e+11, false},
 		{"lustre_default_ea_size_bytes", "Default Extended Attribute (EA) size in bytes", gauge, []labelPair{{"component", "client"}, {"target", "lustrefs-ffff88105db50000"}}, 128, false},
