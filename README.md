@@ -1,7 +1,9 @@
 # Lustre Metrics Exporter
 
+<!-- TODO: Create an issue for both, if necessary.
 [![Go Report Card](https://goreportcard.com/badge/github.com/HewlettPackard/lustre_exporter)](https://goreportcard.com/report/github.com/HewlettPackard/lustre_exporter)
 [![Build Status](https://travis-ci.org/HewlettPackard/lustre_exporter.svg?branch=master)](https://travis-ci.org/HewlettPackard/lustre_exporter)
+-->
 
 [Prometheus](https://prometheus.io/) exporter for Lustre metrics.
 
