@@ -29,8 +29,6 @@ cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
 make
 ```
 
-> Test stage broken since OST metrics update for Lustre version 2.12, see [issue](https://github.com/GSI-HPC/lustre_exporter/issues/6).
-
 ### RPM Package Build
 
 [Manual RPM Package Creation](rpm/README.md)
