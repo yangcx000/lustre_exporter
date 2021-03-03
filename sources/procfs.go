@@ -596,6 +596,9 @@ func getJobStatsIOMetrics(jobBlock string, jobID string, promName string, helpTe
 	if err != nil {
 		return nil, err
 	}
+	if result == 0 {
+		return nil, nil
+	}
 	l := lustreStatsMetric{
 		title:           promName,
 		help:            helpText,
@@ -652,6 +655,9 @@ func getJobStatsOperationMetrics(jobBlock string, jobID string, promName string,
 		result, err = strconv.ParseFloat(strings.TrimSpace(opNumbers[operation.index]), 64)
 		if err != nil {
 			return nil, err
+		}
+		if result == 0 {
+			continue
 		}
 		l := lustreStatsMetric{
 			title:           promName,
