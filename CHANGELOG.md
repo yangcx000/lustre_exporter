@@ -1,10 +1,14 @@
 # Change Log
 
-## [v2.0.1]() ()
+## [v2.1.0](https://github.com/GSI-HPC/lustre_exporter/tree/v2.1.0) (2021-03-05)
+[Full Changelog](https://github.com/GSI-HPC/lustre_exporter/compare/v2.0.0...v2.1.0)
 
 **Closed issues:**
 
-- update golinters runner url in make file [\#2](https://github.com/GSI-HPC/lustre_exporter/issues/2) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
+- Drop 0 values for Lustre Jobstats [\#1](https://github.com/GSI-HPC/lustre_exporter/issues/1) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
+- Fix test stage after changes for Lustre OST disk metrics [\#6](https://github.com/GSI-HPC/lustre_exporter/issues/6) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
+- Implement Lustre OST disk metrics for version 2.12 [\#4](https://github.com/GSI-HPC/lustre_exporter/issues/4) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
+- Update golinters runner url in make file [\#2](https://github.com/GSI-HPC/lustre_exporter/issues/2) ([gabrieleiannetti](https://github.com/gabrieleiannetti))
 
 ## [v2.0.0](https://github.com/HewlettPackard/lustre_exporter/tree/v2.0.0) (2017-12-05)
 [Full Changelog](https://github.com/HewlettPackard/lustre_exporter/compare/v1.1.0...v2.0.0)
