@@ -12,8 +12,57 @@
 ```
 go get github.com/GSI-HPC/lustre_exporter
 ```
+## Prerequisites
+
+The listed versions below have been successfully used.  
+Higher verions 
+
+### Required
+
+* [Golang](https://golang.org/)
+* [Prometheus Utility Tool (promu)](https://github.com/prometheus/promu)
+
+### Optional
+
+* [Fast linters runner for Go (golangci-lint)](https://github.com/golangci/golangci-lint)
 
 ## Building
+
+The build has been accomplished with the following versions successfully yet:  
+
+* golang: 14.7
+* promu: 0.7.0
+* golangci-lint: 1.33.0
+
+### Promu
+
+Latest version:  
+
+`go get -u github.com/prometheus/promu`
+
+Alternatively, specific version:  
+
+```
+git clone https://github.com/prometheus/promu.git $GOPATH/src/github.com/prometheus/promu
+git -C $GOPATH/src/github.com/prometheus/promu/ checkout v0.7.0
+make -C $GOPATH/src/github.com/prometheus/promu/ build
+cp $GOPATH/src/github.com/prometheus/promu/promu $GOPATH/bin/
+```
+
+### Golangci-lint
+
+Latest version:  
+
+`go get -u github.com/golangci/golangci-lint`
+
+Alternatively, specific version:  
+
+```
+git clone https://github.com/golangci/golangci-lint.git $GOPATH/src/github.com/golangci/golangci-lint/
+git -C $GOPATH/src/github.com/golangci/golangci-lint/ checkout v1.33.0
+make -C $GOPATH/src/github.com/golangci/golangci-lint/ build
+cp $GOPATH/src/github.com/golangci/golangci-lint/golangci-lint $GOPATH/bin/
+```
 
 ### Exporter
 
