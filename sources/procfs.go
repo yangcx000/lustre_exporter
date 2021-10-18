@@ -102,15 +102,15 @@ type multistatParsingStruct struct {
 }
 
 func init() {
-	Factories["procfs"] = newLustreSource
+	Factories["procfs"] = newLustreProcFsSource
 }
 
-type lustreProcfsSource struct {
+type lustreProcFsSource struct {
 	lustreProcMetrics []lustreProcMetric
 	basePath          string
 }
 
-func (s *lustreProcfsSource) generateOSTMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"obdfilter/*-OST*": {
 			{"brw_size", "brw_size_megabytes", "Block read/write size in megabytes", s.gaugeMetric, false, extended},
@@ -190,7 +190,7 @@ func (s *lustreProcfsSource) generateOSTMetricTemplates(filter string) {
 	}
 }
 
-func (s *lustreProcfsSource) generateMDTMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateMDTMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"osd-*/*-MDT*": {
 			{"blocksize", "blocksize_bytes", "Filesystem block size in bytes", s.gaugeMetric, false, core},
@@ -216,7 +216,7 @@ func (s *lustreProcfsSource) generateMDTMetricTemplates(filter string) {
 	}
 }
 
-func (s *lustreProcfsSource) generateMGSMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateMGSMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"mgs/MGS/osd/": {
 			{"blocksize", "blocksize_bytes", "Filesystem block size in bytes", s.gaugeMetric, false, core},
@@ -237,7 +237,7 @@ func (s *lustreProcfsSource) generateMGSMetricTemplates(filter string) {
 	}
 }
 
-func (s *lustreProcfsSource) generateMDSMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateMDSMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{}
 	for path := range metricMap {
 		for _, item := range metricMap[path] {
@@ -249,7 +249,7 @@ func (s *lustreProcfsSource) generateMDSMetricTemplates(filter string) {
 	}
 }
 
-func (s *lustreProcfsSource) generateClientMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateClientMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"llite/*": {
 			{"blocksize", "blocksize_bytes", "Filesystem block size in bytes", s.gaugeMetric, false, core},
@@ -297,7 +297,7 @@ func (s *lustreProcfsSource) generateClientMetricTemplates(filter string) {
 	}
 }
 
-func (s *lustreProcfsSource) generateGenericMetricTemplates(filter string) {
+func (s *lustreProcFsSource) generateGenericMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"sptlrpc": {
 			{"encrypt_page_pools", "physical_pages", physicalPagesHelp, s.gaugeMetric, false, extended},
@@ -327,8 +327,8 @@ func (s *lustreProcfsSource) generateGenericMetricTemplates(filter string) {
 	}
 }
 
-func newLustreSource() LustreSource {
-	var l lustreProcfsSource
+func newLustreProcFsSource() LustreSource {
+	var l lustreProcFsSource
 	l.basePath = filepath.Join(ProcLocation, "fs/lustre")
 	//control which node metrics you pull via flags
 	if OstEnabled != disabled {
@@ -352,7 +352,7 @@ func newLustreSource() LustreSource {
 	return &l
 }
 
-func (s *lustreProcfsSource) Update(ch chan<- prometheus.Metric) (err error) {
+func (s *lustreProcFsSource) Update(ch chan<- prometheus.Metric) (err error) {
 	var metricType string
 	var directoryDepth int
 
@@ -697,7 +697,7 @@ func parseJobStatsText(jobStats string, promName string, helpText string, hasMul
 	return metricList, nil
 }
 
-func (s *lustreProcfsSource) parseJobStats(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, string, float64, string, string)) (err error) {
+func (s *lustreProcFsSource) parseJobStats(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, string, float64, string, string)) (err error) {
 	_, nodeName, err := parseFileElements(path, directoryDepth)
 	if err != nil {
 		return err
@@ -720,7 +720,7 @@ func (s *lustreProcfsSource) parseJobStats(nodeType string, metricType string, p
 	return nil
 }
 
-func (s *lustreProcfsSource) parseBRWStats(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, string, string, float64, string, string)) (err error) {
+func (s *lustreProcFsSource) parseBRWStats(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, string, string, float64, string, string)) (err error) {
 	_, nodeName, err := parseFileElements(path, directoryDepth)
 	if err != nil {
 		return err
@@ -762,7 +762,7 @@ func (s *lustreProcfsSource) parseBRWStats(nodeType string, metricType string, p
 	return nil
 }
 
-func (s *lustreProcfsSource) parseFile(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, float64, string, string)) (err error) {
+func (s *lustreProcFsSource) parseFile(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, float64, string, string)) (err error) {
 	_, nodeName, err := parseFileElements(path, directoryDepth)
 	if err != nil {
 		return err
@@ -791,7 +791,7 @@ func (s *lustreProcfsSource) parseFile(nodeType string, metricType string, path 
 	return nil
 }
 
-func (s *lustreProcfsSource) counterMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
+func (s *lustreProcFsSource) counterMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
 	return prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, "", name),
@@ -805,7 +805,7 @@ func (s *lustreProcfsSource) counterMetric(labels []string, labelValues []string
 	)
 }
 
-func (s *lustreProcfsSource) gaugeMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
+func (s *lustreProcFsSource) gaugeMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
 	return prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
 			prometheus.BuildFQName(Namespace, "", name),
@@ -820,7 +820,7 @@ func (s *lustreProcfsSource) gaugeMetric(labels []string, labelValues []string, 
 }
 
 // TODO: Move with metric "pool/granted" to "/sys/fs/lustre/" path
-// func (s *lustreProcfsSource) untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
+// func (s *lustreProcFsSource) untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
 // 	return prometheus.MustNewConstMetric(
 // 		prometheus.NewDesc(
 // 			prometheus.BuildFQName(Namespace, "", name),
