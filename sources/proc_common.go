@@ -64,16 +64,25 @@ type lustreHelpStruct struct {
 }
 
 func newLustreProcMetric(filename string, promName string, source string, path string, helpText string, hasMultipleVals bool, metricFunc prometheusType) lustreProcMetric {
-	var m lustreProcMetric
-	m.filename = filename
-	m.promName = promName
-	m.source = source
-	m.path = path
-	m.helpText = helpText
-	m.hasMultipleVals = hasMultipleVals
-	m.metricFunc = metricFunc
+	return lustreProcMetric{
+		filename:        filename,
+		promName:        promName,
+		source:          source,
+		path:            path,
+		helpText:        helpText,
+		hasMultipleVals: hasMultipleVals,
+		metricFunc:      metricFunc,
+	}
+}
 
-	return m
+func newLustreStatsMetric(title string, help string, value float64, extraLabel string, extraLabelValue string) lustreStatsMetric {
+	return lustreStatsMetric{
+		title:           title,
+		help:            help,
+		value:           value,
+		extraLabel:      extraLabel,
+		extraLabelValue: extraLabelValue,
+	}
 }
 
 func regexCaptureString(pattern string, textToMatch string) (matchedString string) {

@@ -450,14 +450,7 @@ func getStatsOperationMetrics(statsFile string, promName string, helpText string
 		if err != nil {
 			return nil, err
 		}
-		l := lustreStatsMetric{
-			title:           promName,
-			help:            helpText,
-			value:           result,
-			extraLabel:      "operation",
-			extraLabelValue: operation.pattern,
-		}
-		metricList = append(metricList, l)
+		metricList = append(metricList, newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern))
 	}
 	return metricList, nil
 }
@@ -505,14 +498,7 @@ func getStatsIOMetrics(statsFile string, promName string, helpText string) (metr
 	if err != nil {
 		return nil, err
 	}
-	l := lustreStatsMetric{
-		title:           promName,
-		help:            helpText,
-		value:           result,
-		extraLabel:      "",
-		extraLabelValue: "",
-	}
-	metricList = append(metricList, l)
+	metricList = append(metricList, newLustreStatsMetric(promName, helpText, result, "", ""))
 
 	return metricList, nil
 }
@@ -599,14 +585,10 @@ func getJobStatsIOMetrics(jobBlock string, jobID string, promName string, helpTe
 	if result == 0 {
 		return nil, nil
 	}
-	l := lustreStatsMetric{
-		title:           promName,
-		help:            helpText,
-		value:           result,
-		extraLabel:      "",
-		extraLabelValue: "",
-	}
-	metricList = append(metricList, lustreJobsMetric{jobID, l})
+	metricList = append(metricList,
+		lustreJobsMetric{jobID: jobID,
+			lustreStatsMetric: newLustreStatsMetric(promName, helpText, result, "", ""),
+		})
 
 	return metricList, err
 }
@@ -659,14 +641,10 @@ func getJobStatsOperationMetrics(jobBlock string, jobID string, promName string,
 		if result == 0 {
 			continue
 		}
-		l := lustreStatsMetric{
-			title:           promName,
-			help:            helpText,
-			value:           result,
-			extraLabel:      "operation",
-			extraLabelValue: operation.pattern,
-		}
-		metricList = append(metricList, lustreJobsMetric{jobID, l})
+		metricList = append(metricList,
+			lustreJobsMetric{jobID: jobID,
+				lustreStatsMetric: newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern),
+			})
 	}
 	return metricList, err
 }

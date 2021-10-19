@@ -79,6 +79,7 @@ func (s *lustreProcSysSource) generateLNETTemplates(filter string) {
 			{"watchdog_ratelimit", "watchdog_ratelimit_enabled", "Returns 1 if the watchdog rate limiter is enabled", s.gaugeMetric, false, extended},
 		},
 	}
+
 	for path := range metricMap {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
@@ -149,11 +150,8 @@ func parseSysStatsFile(helpText string, promName string, statsFile string) (metr
 	if err != nil {
 		return metric, err
 	}
-	metric = lustreStatsMetric{
-		title: promName,
-		help:  helpText,
-		value: value,
-	}
+	metric = newLustreStatsMetric(promName, helpText, value, "", "")
+
 	return metric, nil
 }
 
