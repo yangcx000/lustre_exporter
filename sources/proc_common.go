@@ -63,8 +63,8 @@ type lustreHelpStruct struct {
 	priorityLevel   string
 }
 
-func newLustreProcMetric(filename string, promName string, source string, path string, helpText string, hasMultipleVals bool, metricFunc prometheusType) lustreProcMetric {
-	return lustreProcMetric{
+func newLustreProcMetric(filename string, promName string, source string, path string, helpText string, hasMultipleVals bool, metricFunc prometheusType) *lustreProcMetric {
+	return &lustreProcMetric{
 		filename:        filename,
 		promName:        promName,
 		source:          source,
@@ -75,8 +75,8 @@ func newLustreProcMetric(filename string, promName string, source string, path s
 	}
 }
 
-func newLustreStatsMetric(title string, help string, value float64, extraLabel string, extraLabelValue string) lustreStatsMetric {
-	return lustreStatsMetric{
+func newLustreStatsMetric(title string, help string, value float64, extraLabel string, extraLabelValue string) *lustreStatsMetric {
+	return &lustreStatsMetric{
 		title:           title,
 		help:            help,
 		value:           value,

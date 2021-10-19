@@ -84,7 +84,7 @@ func (s *lustreProcSysSource) generateLNETTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "lnet", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -150,9 +150,7 @@ func parseSysStatsFile(helpText string, promName string, statsFile string) (metr
 	if err != nil {
 		return metric, err
 	}
-	metric = newLustreStatsMetric(promName, helpText, value, "", "")
-
-	return metric, nil
+	return *newLustreStatsMetric(promName, helpText, value, "", ""), nil
 }
 
 func (s *lustreProcSysSource) parseFile(nodeType string, metricType string, path string, helpText string, promName string, handler func(string, string, string, string, float64)) (err error) {

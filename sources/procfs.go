@@ -184,7 +184,7 @@ func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "ost", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -210,7 +210,7 @@ func (s *lustreProcFsSource) generateMDTMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "mdt", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -231,7 +231,7 @@ func (s *lustreProcFsSource) generateMGSMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "mgs", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -243,7 +243,7 @@ func (s *lustreProcFsSource) generateMDSMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "mds", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -291,7 +291,7 @@ func (s *lustreProcFsSource) generateClientMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "client", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -321,7 +321,7 @@ func (s *lustreProcFsSource) generateGenericMetricTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "generic", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
@@ -450,7 +450,7 @@ func getStatsOperationMetrics(statsFile string, promName string, helpText string
 		if err != nil {
 			return nil, err
 		}
-		metricList = append(metricList, newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern))
+		metricList = append(metricList, *newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern))
 	}
 	return metricList, nil
 }
@@ -498,7 +498,7 @@ func getStatsIOMetrics(statsFile string, promName string, helpText string) (metr
 	if err != nil {
 		return nil, err
 	}
-	metricList = append(metricList, newLustreStatsMetric(promName, helpText, result, "", ""))
+	metricList = append(metricList, *newLustreStatsMetric(promName, helpText, result, "", ""))
 
 	return metricList, nil
 }
@@ -587,7 +587,7 @@ func getJobStatsIOMetrics(jobBlock string, jobID string, promName string, helpTe
 	}
 	metricList = append(metricList,
 		lustreJobsMetric{jobID: jobID,
-			lustreStatsMetric: newLustreStatsMetric(promName, helpText, result, "", ""),
+			lustreStatsMetric: *newLustreStatsMetric(promName, helpText, result, "", ""),
 		})
 
 	return metricList, err
@@ -643,7 +643,7 @@ func getJobStatsOperationMetrics(jobBlock string, jobID string, promName string,
 		}
 		metricList = append(metricList,
 			lustreJobsMetric{jobID: jobID,
-				lustreStatsMetric: newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern),
+				lustreStatsMetric: *newLustreStatsMetric(promName, helpText, result, "operation", operation.pattern),
 			})
 	}
 	return metricList, err

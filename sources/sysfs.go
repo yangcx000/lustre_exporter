@@ -52,7 +52,7 @@ func (s *lustreSysSource) generateHealthStatusTemplates(filter string) {
 		for _, item := range metricMap[path] {
 			if filter == extended || item.priorityLevel == core {
 				newMetric := newLustreProcMetric(item.filename, item.promName, "health", path, item.helpText, item.hasMultipleVals, item.metricFunc)
-				s.lustreProcMetrics = append(s.lustreProcMetrics, newMetric)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
 			}
 		}
 	}
