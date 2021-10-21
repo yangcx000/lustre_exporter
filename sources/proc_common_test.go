@@ -205,10 +205,16 @@ func TestMultipleGetJobStats(t *testing.T) {
 	  get_info:        { samples:          23, unit:  reqs }
 	  set_info:        { samples:          74, unit:  reqs }
 	  quotactl:        { samples:           9, unit:  reqs }`
-	expected := 3
+	expectedJobStats := 3
 
-	matchedStrings := regexCaptureStrings("(?ms:job_id:.*?$.*?(-|\\z))", testJobStatsBlock)
-	if l := len(matchedStrings); l != expected {
-		t.Fatalf("Retrieved an unexpected number of regex matches. Expected: %d, Got: %d", expected, l)
+	capturedJobStats := regexCaptureStrings("(?ms:job_id:.*?$.*?(-|\\z))", testJobStatsBlock)
+	if l := len(capturedJobStats); l != expectedJobStats {
+		t.Fatalf("Retrieved an unexpected number of regex matches. Expected: %d, Got: %d", expectedJobStats, l)
+	}
+
+	exptectedLastJobStatEntry := "job_id:          28\n\t  snapshot_time:   1510782606\n\t  read_bytes:      { samples:         125, unit: bytes, min:    4096, max:    4096, sum:          512000 }\n\t  write_bytes:     { samples:       64208, unit: bytes, min:    4096, max: 4194304, sum:    213963751424 }\n\t  getattr:         { samples:           7, unit:  reqs }\n\t  setattr:         { samples:          43, unit:  reqs }\n\t  punch:           { samples:           1, unit:  reqs }\n\t  sync:            { samples:           8, unit:  reqs }\n\t  destroy:         { samples:          12, unit:  reqs }\n\t  create:          { samples:           5, unit:  reqs }\n\t  statfs:          { samples:           6, unit:  reqs }\n\t  get_info:        { samples:          23, unit:  reqs }\n\t  set_info:        { samples:          74, unit:  reqs }\n\t  quotactl:        { samples:           9, unit:  reqs }"
+
+	if capturedJobStats[2] != exptectedLastJobStatEntry {
+		t.Fatal("Comparision with last job stat entry failed.")
 	}
 }
