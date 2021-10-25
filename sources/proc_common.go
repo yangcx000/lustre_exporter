@@ -30,8 +30,9 @@ const (
 )
 
 var (
-	numRegexPattern   = regexp.MustCompile(`[0-9]*\.[0-9]+|[0-9]+`)
-	jobidRegexPattern = regexp.MustCompile(`job_id:\s*(.*\.[0-9]+|[0-9_]+)`)
+	numRegexPattern      = regexp.MustCompile(`[0-9]*\.[0-9]+|[0-9]+`)
+	jobidRegexPattern    = regexp.MustCompile(`job_id:\s*(.*\.[0-9]+|[0-9_]+)`)
+	jobStatsRegexPattern = regexp.MustCompile(`(?ms:job_id:.*?$.*?(?:-|\z))`)
 )
 
 type prometheusType func([]string, []string, string, string, float64) prometheus.Metric
@@ -107,7 +108,12 @@ func regexCaptureNumbers(textToMatch string) (matchedNumbers []string) {
 
 func regexCaptureJobids(textToMatch string) (matchedJobids []string) {
 	matchedJobids = jobidRegexPattern.FindStringSubmatch(textToMatch)
-	return
+	return matchedJobids
+}
+
+func regexCaptureJobStats(textToMatch string) (matchedJobStats []string) {
+	matchedJobStats = jobStatsRegexPattern.FindAllString(textToMatch, -1)
+	return matchedJobStats
 }
 
 func parseFileElements(path string, directoryDepth int) (name string, nodeName string, err error) {

@@ -207,7 +207,8 @@ func TestMultipleGetJobStats(t *testing.T) {
 	  quotactl:        { samples:           9, unit:  reqs }`
 	expectedJobStats := 3
 
-	capturedJobStats := regexCaptureStrings("(?ms:job_id:.*?$.*?(-|\\z))", testJobStatsBlock)
+	capturedJobStats := regexCaptureJobStats(testJobStatsBlock)
+
 	if l := len(capturedJobStats); l != expectedJobStats {
 		t.Fatalf("Retrieved an unexpected number of regex matches. Expected: %d, Got: %d", expectedJobStats, l)
 	}

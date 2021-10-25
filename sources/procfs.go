@@ -650,7 +650,7 @@ func getJobStatsOperationMetrics(jobBlock string, jobID string, promName string,
 }
 
 func parseJobStatsText(jobStats string, promName string, helpText string, hasMultipleVals bool) (metricList []lustreJobsMetric, err error) {
-	jobs := regexCaptureStrings("(?ms:job_id:.*?$.*?(-|\\z))", jobStats)
+	jobs := regexCaptureJobStats(jobStats)
 	if len(jobs) < 1 {
 		return nil, nil
 	}
