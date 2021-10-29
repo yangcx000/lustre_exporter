@@ -114,7 +114,7 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 	var err error
 
 	if LctlCommandMode {
-		out, err := exec.Command("lctl" + changelogUsersCmdArg).Output()
+		out, err := exec.Command("lctl", "get_param", changelogUsersCmdArg).Output()
 		if err != nil {
 			return nil, err
 		}

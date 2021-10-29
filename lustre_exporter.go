@@ -135,7 +135,7 @@ func main() {
 	sources.HealthStatusEnabled = *healthStatusEnabled
 	log.Infof(" - Health State: %s", sources.HealthStatusEnabled)
 
-	enabledSources := []string{"procfs", "procsys", "sysfs"}
+	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
 	sourceList, err := loadSources(enabledSources)
 	if err != nil {
