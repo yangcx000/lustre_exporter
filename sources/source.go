@@ -24,6 +24,10 @@ var ProcLocation = "/proc"
 // SysLocation is the source to pull sys files from.
 var SysLocation = "/sys"
 
+// If LctlCommandMode is true it enables execution of lctl command which is meant to be executed on a Lustre client node.
+// With false a local file is processed with test data.
+var LctlCommandMode = true
+
 //Namespace defines the namespace shared by all Lustre metrics.
 const Namespace = "lustre"
 

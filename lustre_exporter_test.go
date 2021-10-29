@@ -208,6 +208,8 @@ func TestCollector(t *testing.T) {
 	sources.ProcLocation = "proc"
 	sources.SysLocation = "sys"
 
+	sources.LctlCommandMode = false
+
 	expectedMetrics := []promType{
 		// TODO: OST Metrics to be moved to /sys/fs/lustre
 		// {"lustre_degraded", "Binary indicator as to whether or not the pool is degraded - 0 for not degraded, 1 for degraded", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0000"}}, 0, false},
@@ -1192,6 +1194,11 @@ func TestCollector(t *testing.T) {
 		{"lustre_blocksize_bytes", "Filesystem block size in bytes", gauge, []labelPair{{"component", "ost"}, {"target", "lustrefs-OST0000"}}, 1.048576e+06, false},
 
 		// MDT Metrics
+		{"lustre_changelog_current_index", "Changelog current index.", counter, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}}, 34, false},
+		{"lustre_changelog_user_index", "Index of registered changelog user.", counter, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}, {"id", "cl1"}}, 0, false},
+		{"lustre_changelog_user_index", "Index of registered changelog user.", counter, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}, {"id", "cl2"}}, 34, false},
+		{"lustre_changelog_user_idle_time", "Idle time in seconds of registered changelog user.", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}, {"id", "cl1"}}, 1725676, false},
+		{"lustre_changelog_user_idle_time", "Idle time in seconds of registered changelog user.", gauge, []labelPair{{"component", "mdt"}, {"target", "lustrefs-MDT0000"}, {"id", "cl2"}}, 28, false},
 		{"lustre_job_stats_total", "Number of operations the filesystem has performed.", counter, []labelPair{{"component", "mdt"}, {"jobid", "43"}, {"operation", "close"}, {"target", "lustrefs-MDT0000"}}, 87, false},
 		{"lustre_job_stats_total", "Number of operations the filesystem has performed.", counter, []labelPair{{"component", "mdt"}, {"jobid", "43"}, {"operation", "crossdir_rename"}, {"target", "lustrefs-MDT0000"}}, 2, false},
 		{"lustre_job_stats_total", "Number of operations the filesystem has performed.", counter, []labelPair{{"component", "mdt"}, {"jobid", "43"}, {"operation", "getattr"}, {"target", "lustrefs-MDT0000"}}, 45, false},
@@ -1705,7 +1712,7 @@ func TestCollector(t *testing.T) {
 	for _, target := range targets {
 		toggleCollectors(target)
 		var missingMetrics []promType // Array of metrics that are missing for the given target
-		enabledSources := []string{"procfs", "procsys", "sysfs"}
+		enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
 		sourceList, err := loadSources(enabledSources)
 		if err != nil {
@@ -1787,4 +1794,6 @@ func TestCollector(t *testing.T) {
 	// Return the proc location to the default value
 	sources.ProcLocation = "/proc"
 	sources.SysLocation = "/sys"
+
+	sources.LctlCommandMode = true
 }
