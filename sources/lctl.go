@@ -81,9 +81,7 @@ type lustreLctlSource struct {
 func newLustreLctlSource() LustreSource {
 	var l lustreLctlSource
 	l.metricCreator = []lustreLctlMetricCreator{}
-	if MdtEnabled != disabled {
-		l.generateMDTMetricCreator(MdtEnabled)
-	}
+	l.generateMDTMetricCreator(MdtEnabled)
 	return &l
 }
 
@@ -101,7 +99,7 @@ func (s *lustreLctlSource) Update(ch chan<- prometheus.Metric) (err error) {
 }
 
 func (s *lustreLctlSource) generateMDTMetricCreator(filter string) {
-	if filter != disabled {
+	if filter == extended {
 		s.metricCreator = append(s.metricCreator,
 			lustreLctlMetricCreator{argument: changelogUsersCmdArg, metricHandler: s.createMDTChangelogUsersMetrics})
 	}
