@@ -1,6 +1,6 @@
 # Manual RPM Package Creation
 
-Given the Lustre exporter version 2.1.0.
+Given the Lustre exporter version 2.1.1.
 
 ## Create Directory Structure for RPM Build
 
@@ -10,16 +10,16 @@ Top level directory structure:
 
 Exporter directory:  
 
-`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/usr/bin/`  
-`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/usr/lib/systemd/system/`  
-`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/etc/sysconfig/`  
+`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/usr/bin/`  
+`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/usr/lib/systemd/system/`  
+`mkdir -p ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/etc/sysconfig/`  
 
 Copy required files from exporter source directory to RPM exporter directory:  
 
 `cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/rpm/prometheus-lustre-exporter.spec ~/rpmbuild/SPECS/`  
-`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/lustre_exporter ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/usr/bin/`  
-`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/systemd/prometheus-lustre-exporter.service ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/usr/lib/systemd/system/`  
-`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/systemd/prometheus-lustre-exporter.options ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.0/etc/sysconfig/`  
+`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/lustre_exporter ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/usr/bin/`  
+`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/systemd/prometheus-lustre-exporter.service ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/usr/lib/systemd/system/`  
+`cp $GOPATH/src/github.com/GSI-HPC/lustre_exporter/systemd/prometheus-lustre-exporter.options ~/rpmbuild/SOURCES/prometheus-lustre-exporter-2.1.1/etc/sysconfig/`  
 
 After setup the RPM top level directory should contain the required files:  
 
@@ -28,7 +28,7 @@ After setup the RPM top level directory should contain the required files:
 ├── BUILD
 ├── RPMS
 ├── SOURCES
-│   └── prometheus-lustre-exporter-2.1.0
+│   └── prometheus-lustre-exporter-2.1.1
 │       ├── etc
 │       │   └── sysconfig
 │       │       └── prometheus-lustre-exporter.options
@@ -45,7 +45,7 @@ After setup the RPM top level directory should contain the required files:
 ```
 Create source TAR ball for RPM build:  
 
-`cd ~/rpmbuild/SOURCES; tar -czvf prometheus-lustre-exporter-2.1.0.tar.gz prometheus-lustre-exporter-2.1.0`  
+`cd ~/rpmbuild/SOURCES; tar -czvf prometheus-lustre-exporter-2.1.1.tar.gz prometheus-lustre-exporter-2.1.1`  
 
 > Use relative path here, otherwise rpmbuild will not find the extracted files.  
 
