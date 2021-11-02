@@ -48,6 +48,9 @@ getent group prometheus >/dev/null || groupadd -r prometheus
 getent passwd prometheus >/dev/null || \
     useradd -r -g prometheus -d /dev/null -s /sbin/nologin \
     -c "Prometheus exporter user" prometheus
+mkdir -p /etc/sudoers.d/
+echo "prometheus ALL = NOPASSWD: /usr/sbin/lctl get_param *" > /etc/sudoers.d/prometheus
+chmod 0440 /etc/sudoers.d/prometheus
 exit 0
 
 %post

@@ -18,15 +18,19 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os/exec"
+	"os/user"
 	"path/filepath"
 	"regexp"
 	"strconv"
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/common/log"
 )
 
 var (
+	lctlCmdCall                       = "" // If user not root use sudo as command, otherwise lctl
+	lctlCmdArgs                       = []string{}
 	changelogTargetRegexPattern       = regexp.MustCompile(`mdd.([\w\d-]+-MDT[\d]+).changelog_users=`)
 	changelogCurrentIndexRegexPattern = regexp.MustCompile(`current index: (\d+)`)
 	changelogUserRegexPattern         = regexp.MustCompile(`(?ms:(cl\d+)\s+(\d+) \((\d+)\))`)
@@ -79,6 +83,30 @@ type lustreLctlSource struct {
 }
 
 func newLustreLctlSource() LustreSource {
+	if LctlCommandMode == true {
+		_, err := exec.LookPath("lctl")
+		if err != nil {
+			log.Errorln(err)
+			return nil
+		}
+		user, err := user.Current()
+		if err != nil {
+			log.Errorln(err)
+			return nil
+		}
+		if user.Uid == "0" { // root user
+			lctlCmdCall = "lctl"
+			lctlCmdArgs = []string{"get_param", changelogUsersCmdArg}
+		} else {
+			_, err := exec.LookPath("sudo")
+			if err != nil {
+				log.Errorln(err)
+				return nil
+			}
+			lctlCmdCall = "sudo"
+			lctlCmdArgs = []string{"lctl", "get_param", changelogUsersCmdArg}
+		}
+	}
 	var l lustreLctlSource
 	l.metricCreator = []lustreLctlMetricCreator{}
 	l.generateMDTMetricCreator(MdtEnabled)
@@ -112,7 +140,7 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 	var err error
 
 	if LctlCommandMode {
-		out, err := exec.Command("lctl", "get_param", changelogUsersCmdArg).Output()
+		out, err := exec.Command(lctlCmdCall, lctlCmdArgs...).Output()
 		if err != nil {
 			return nil, err
 		}
