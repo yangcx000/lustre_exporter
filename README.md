@@ -30,8 +30,8 @@ Higher verions
 
 The build has been accomplished with the following versions successfully yet:  
 
-* golang: 14.7
-* promu: 0.7.0/0.12.0
+* golang: 1.15.5
+* promu: 0.12.0
 * golangci-lint: 1.33.0
 
 ### Promu
