@@ -44,7 +44,7 @@ Alternatively, specific version:
 
 ```
 git clone https://github.com/prometheus/promu.git $GOPATH/src/github.com/prometheus/promu
-git -C $GOPATH/src/github.com/prometheus/promu/ checkout v0.7.0
+git -C $GOPATH/src/github.com/prometheus/promu/ checkout v0.12.0
 make -C $GOPATH/src/github.com/prometheus/promu/ build
 cp $GOPATH/src/github.com/prometheus/promu/promu $GOPATH/bin/
 ```
