@@ -83,7 +83,7 @@ type lustreLctlSource struct {
 }
 
 func newLustreLctlSource() LustreSource {
-	if LctlCommandMode == true {
+	if LctlCommandMode {
 		_, err := exec.LookPath("lctl")
 		if err != nil {
 			log.Errorln(err)
