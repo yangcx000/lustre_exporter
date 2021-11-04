@@ -113,9 +113,15 @@ func main() {
 		healthStatusEnabled = kingpin.Flag("collector.health", "Set Health metric level. Valid levels: [extended, core, disabled]").Default("extended").Enum("extended", "core", "disabled")
 		listenAddress       = kingpin.Flag("web.listen-address", "Address to use to expose Lustre metrics.").Default(":9169").String()
 		metricsPath         = kingpin.Flag("web.telemetry-path", "Path to use to expose Lustre metrics.").Default("/metrics").String()
+		logLevel            = kingpin.Flag("log.level", "Set log level. Valid levels: [debug, info, warn, error]").Default("info").Enum("debug", "info", "warn", "error")
 	)
 
 	kingpin.Parse()
+
+	err := log.Base().SetLevel(*logLevel)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	log.Infoln("Starting lustre_exporter", version.Info())
 	log.Infoln("Build context", version.BuildContext())
