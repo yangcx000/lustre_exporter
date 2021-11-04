@@ -70,10 +70,10 @@ func collectFromSource(name string, s sources.LustreSource, ch chan<- prometheus
 	err := s.Update(ch)
 	duration := time.Since(begin)
 	if err != nil {
-		log.Errorf("ERROR: %q source failed after %f seconds: %s", name, duration.Seconds(), err)
+		log.Errorf("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
 		result = "error"
 	} else {
-		log.Debugf("OK: %q source succeeded after %f seconds: %s", name, duration.Seconds(), err)
+		log.Debugf("source %q succeeded after %f seconds", name, duration.Seconds())
 	}
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
