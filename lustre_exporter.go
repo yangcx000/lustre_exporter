@@ -70,10 +70,10 @@ func collectFromSource(name string, s sources.LustreSource, ch chan<- prometheus
 	err := s.Update(ch)
 	duration := time.Since(begin)
 	if err != nil {
-		level.Error(logger).Log("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
+		_ = level.Error(logger).Log("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
 		result = "error"
-	} else {
-		level.Debug(logger).Log("source %q succeeded after %f seconds", name, duration.Seconds())
+	} else{
+		_ = level.Debug(logger).Log("source %q succeeded after %f seconds", name, duration.Seconds())
 	}
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
@@ -120,43 +120,43 @@ func main() {
 
 	//set Loglevel
 	var allow = promlog.AllowedLevel{}
-	allow.Set(*logLevel)
+	_ = allow.Set(*logLevel)
 	var config = promlog.Config{Level: &allow, Format: &promlog.AllowedFormat{}}
 	logger = promlog.New(&config)
 
-	level.Info(logger).Log("Starting lustre_exporter", version.Info())
-	level.Info(logger).Log("Build context", version.BuildContext())
+	_ = level.Info(logger).Log("Starting lustre_exporter", version.Info())
+	_ = level.Info(logger).Log("Build context", version.BuildContext())
 
-	level.Info(logger).Log("Collector status:")
+	_ = level.Info(logger).Log("Collector status:")
 	sources.OstEnabled = *ostEnabled
-	level.Info(logger).Log(" - OST State: %s", sources.OstEnabled)
+	_ = level.Info(logger).Log(" - OST State: %s", sources.OstEnabled)
 	sources.MdtEnabled = *mdtEnabled
-	level.Info(logger).Log(" - MDT State: %s", sources.MdtEnabled)
+	_ = level.Info(logger).Log(" - MDT State: %s", sources.MdtEnabled)
 	sources.MgsEnabled = *mgsEnabled
-	level.Info(logger).Log(" - MGS State: %s", sources.MgsEnabled)
+	_ = level.Info(logger).Log(" - MGS State: %s", sources.MgsEnabled)
 	sources.MdsEnabled = *mdsEnabled
-	level.Info(logger).Log(" - MDS State: %s", sources.MdsEnabled)
+	_ = level.Info(logger).Log(" - MDS State: %s", sources.MdsEnabled)
 	sources.ClientEnabled = *clientEnabled
-	level.Info(logger).Log(" - Client State: %s", sources.ClientEnabled)
+	_ = level.Info(logger).Log(" - Client State: %s", sources.ClientEnabled)
 	sources.GenericEnabled = *genericEnabled
-	level.Info(logger).Log(" - Generic State: %s", sources.GenericEnabled)
+	_ = level.Info(logger).Log(" - Generic State: %s", sources.GenericEnabled)
 	sources.LnetEnabled = *lnetEnabled
-	level.Info(logger).Log(" - Lnet State: %s", sources.LnetEnabled)
+	_ = level.Info(logger).Log(" - Lnet State: %s", sources.LnetEnabled)
 	sources.HealthStatusEnabled = *healthStatusEnabled
-	level.Info(logger).Log(" - Health State: %s", sources.HealthStatusEnabled)
+	_ = level.Info(logger).Log(" - Health State: %s", sources.HealthStatusEnabled)
 
 	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
 	sourceList, err := loadSources(enabledSources)
 	if err != nil {
-		level.Error(logger).Log("Couldn't load sources: %q", err)
+		_ = level.Error(logger).Log("Couldn't load sources: %q", err)
 		os.Exit(1)
 	}
 
-	level.Info(logger).Log("Available sources:")
+	_ = level.Info(logger).Log("Available sources:")
 
 	for s := range sourceList {
-		level.Info(logger).Log(" - %s", s)
+		_ = level.Info(logger).Log(" - %s", s)
 	}
 
 	prometheus.MustRegister(LustreSource{sourceList: sourceList})
@@ -173,15 +173,15 @@ func main() {
 			</body>
 			</html>`))
 		if err != nil {
-			level.Error(logger).Log(num, err)
+			_ = level.Error(logger).Log(num, err)
 			os.Exit(1)
 		}
 	})
 
-	level.Info(logger).Log("Listening on", *listenAddress)
+	_ = level.Info(logger).Log("Listening on", *listenAddress)
 	err = http.ListenAndServe(*listenAddress, nil)
 	if err != nil {
-		level.Error(logger).Log("Error on Listen", err)
+		_ = level.Error(logger).Log("Error on Listen", err)
 		os.Exit(1)
 	}
 }
