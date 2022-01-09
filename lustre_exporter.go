@@ -15,6 +15,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/GSI-HPC/lustre_exporter/sources"
+	"gopkg.in/alecthomas/kingpin.v2"
+	stdlog "log"
 	"net/http"
 	"os"
 	"sync"
