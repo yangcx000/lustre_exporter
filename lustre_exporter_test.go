@@ -1702,7 +1702,7 @@ func TestCollector(t *testing.T) {
 	}
 
 	// These following metrics should be filtered out as they are specific to the deployment and will always change
-	blacklistedMetrics := []string{"go_", "http_", "process_", "lustre_exporter_"}
+	blacklistedMetrics := []string{"go_", "http_", "process_", "lustre_exporter_","promhttp_"}
 
 	for i, metric := range expectedMetrics {
 		newLabels, err := sortByKey(metric.Labels)
