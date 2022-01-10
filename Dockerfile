@@ -5,13 +5,8 @@
 FROM golang:1.17.5-bullseye
 MAINTAINER jknedlik <j.knedlik@gsi.de>
 RUN apt-get update
-RUN apt install vim -y
 COPY . /go/lustre_exporter
 WORKDIR /go/lustre_exporter
 RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
-
-# RUN go get -u github.com/golangci/golangci-lint
 RUN go get -u github.com/prometheus/promu
-
 ENTRYPOINT ["/bin/bash"]
-#CMD ["alice-xrootd-deb/debian.deb","vol/alice-xrootd.deb"]
