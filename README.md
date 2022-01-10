@@ -10,12 +10,11 @@
 ## Getting
 
 ```
-go get github.com/GSI-HPC/lustre_exporter
+go install github.com/GSI-HPC/lustre_exporter@latest
 ```
 ## Prerequisites
 
 The listed versions below have been successfully used.  
-Higher verions 
 
 ### Required
 
@@ -30,59 +29,65 @@ Higher verions
 
 The build has been accomplished with the following versions successfully yet:  
 
-* golang: 1.15.5
-* promu: 0.12.0
-* golangci-lint: 1.33.0
+* golang: 1.17.5
+* promu: 0.13.0
+* golangci-lint: 1.43.0
+
 
 ### Promu
 
-Latest version:  
+Use Promu v0.13.0 version:  
 
-`go get -u github.com/prometheus/promu`
+`go install github.com/prometheus/promu@v0.13.0`
 
-Alternatively, specific version:  
-
-```
-git clone https://github.com/prometheus/promu.git $GOPATH/src/github.com/prometheus/promu
-git -C $GOPATH/src/github.com/prometheus/promu/ checkout v0.12.0
-make -C $GOPATH/src/github.com/prometheus/promu/ build
-cp $GOPATH/src/github.com/prometheus/promu/promu $GOPATH/bin/
-```
 
 ### Golangci-lint
 
+Use golangci-lint v1.43.0
 Latest version:  
 
-`go get -u github.com/golangci/golangci-lint`
+`go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0`
 
-Alternatively, specific version:  
-
-```
-git clone https://github.com/golangci/golangci-lint.git $GOPATH/src/github.com/golangci/golangci-lint/
-git -C $GOPATH/src/github.com/golangci/golangci-lint/ checkout v1.33.0
-make -C $GOPATH/src/github.com/golangci/golangci-lint/ build
-cp $GOPATH/src/github.com/golangci/golangci-lint/golangci-lint $GOPATH/bin/
-```
 
 ### Exporter
 
-For just building the exporter:
+For just building the exporter: (in the repo base dir)
 
 ```
-cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
 make build
 ```
 
 Building the exporter with code testing, formatting and linting:
 
 ```
-cd $GOPATH/src/github.com/GSI-HPC/lustre_exporter
 make
 ```
 
 ### RPM Package Build
 
-[Manual RPM Package Creation](rpm/README.md)
+A Centos7 rpm package can be built by following the small dockerfile in build_containersor the rpm Manual in rpm/README.md
+
+### Build Containers
+
+2 Docker container for building lustre_exporter are provided:
+
+1.  A container based on the offical golang:1.17.5-bullseye container image that provides the lustre_exporter binary. 
+Build it via 
+```shell
+# from repo base dir run
+docker build  --tag l_export -f build_containers/Dockerfile .
+docker run -v $PWD:/cpy -it lustre_exporter
+```
+Your binary is then available in build/lustre_exporter-X.X.X
+
+2. A Centos7 container based on the official Centos7 container image that provides a rpm package containing the lustre_exporter and systemd unit files
+Build it via 
+```shell
+# from repo base dir run
+docker build -t rpm_dock -f build_containers/RPM-Dockerfile .
+docker run -v $PWD:/rpm -it rpm_dock
+```
+Your rpm package is then available in `build/prometheus-lustre-exporter-vX.X.X-X.X.el7.x86_64.rpm`
 
 ## Running
 
