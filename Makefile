@@ -38,7 +38,7 @@ lint: $(GOLINTER)
 
 build: $(PROMU)
 	@echo ">> building binaries"
-	@$(PROMU) build --prefix $(PREFIX)
+	@$(GO) build 
 
 clean:
 	@echo ">> Cleaning up"
