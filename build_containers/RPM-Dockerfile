@@ -1,0 +1,24 @@
+FROM centos:7
+MAINTAINER jknedlik <j.knedlik@gsi.de>
+WORKDIR /tmp
+# get dependencies from yum
+RUN yum install -y git make gcc rpm-build
+# get & install go
+RUN curl -LO https://go.dev/dl/go1.17.5.linux-amd64.tar.gz
+RUN tar -C /usr/local -xvzf go1.17.5.linux-amd64.tar.gz
+ENV PATH=$PATH:/usr/local/go/bin
+#get linter and build tools
+RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
+RUN go install github.com/prometheus/promu@v0.13.0
+#build lustre_exporter
+COPY . /go/lustre_exporter
+WORKDIR /go/lustre_exporter
+RUN make
+#build rpm
+RUN rpm/build.sh
+#prepare mountpoint for copy
+RUN mkdir /rpm
+#copy rpm int /rpm
+ENTRYPOINT ["/bin/sh"]
+ENTRYPOINT ["cp"]
+CMD ["-r","/root/rpmbuild/RPMS/x86_64/","/rpm/build"]

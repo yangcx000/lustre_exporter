@@ -15,16 +15,18 @@ package main
 
 import (
 	"fmt"
+	"github.com/GSI-HPC/lustre_exporter/sources"
+	"gopkg.in/alecthomas/kingpin.v2"
+	stdlog "log"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 
-	"gopkg.in/alecthomas/kingpin.v2"
-
-	"github.com/GSI-HPC/lustre_exporter/sources"
+	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/common/log"
+	"github.com/prometheus/common/promlog"
 	"github.com/prometheus/common/version"
 )
 
@@ -38,6 +40,7 @@ var (
 		},
 		[]string{"source", "result"},
 	)
+	logger = promlog.New(&promlog.Config{})
 )
 
 //LustreSource is a list of all sources that the user would like to collect.
@@ -70,10 +73,10 @@ func collectFromSource(name string, s sources.LustreSource, ch chan<- prometheus
 	err := s.Update(ch)
 	duration := time.Since(begin)
 	if err != nil {
-		log.Errorf("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
+		_ = level.Error(logger).Log("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
 		result = "error"
 	} else {
-		log.Debugf("source %q succeeded after %f seconds", name, duration.Seconds())
+		_ = level.Debug(logger).Log("source %q succeeded after %f seconds", name, duration.Seconds())
 	}
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
@@ -118,48 +121,55 @@ func main() {
 
 	kingpin.Parse()
 
-	err := log.Base().SetLevel(*logLevel)
-	if err != nil {
-		log.Fatalln(err)
-	}
+	//set Loglevel
+	var allow = promlog.AllowedLevel{}
+	_ = allow.Set(*logLevel)
+	var config = promlog.Config{Level: &allow, Format: &promlog.AllowedFormat{}}
+	logger = promlog.New(&config)
 
-	log.Infoln("Starting lustre_exporter", version.Info())
-	log.Infoln("Build context", version.BuildContext())
+	_ = level.Info(logger).Log("Starting lustre_exporter", version.Info())
+	_ = level.Info(logger).Log("Build context", version.BuildContext())
 
-	log.Infof("Collector status:")
+	_ = level.Info(logger).Log("Collector status:")
 	sources.OstEnabled = *ostEnabled
-	log.Infof(" - OST State: %s", sources.OstEnabled)
+	_ = level.Info(logger).Log(" - OST State: %s", sources.OstEnabled)
 	sources.MdtEnabled = *mdtEnabled
-	log.Infof(" - MDT State: %s", sources.MdtEnabled)
+	_ = level.Info(logger).Log(" - MDT State: %s", sources.MdtEnabled)
 	sources.MgsEnabled = *mgsEnabled
-	log.Infof(" - MGS State: %s", sources.MgsEnabled)
+	_ = level.Info(logger).Log(" - MGS State: %s", sources.MgsEnabled)
 	sources.MdsEnabled = *mdsEnabled
-	log.Infof(" - MDS State: %s", sources.MdsEnabled)
+	_ = level.Info(logger).Log(" - MDS State: %s", sources.MdsEnabled)
 	sources.ClientEnabled = *clientEnabled
-	log.Infof(" - Client State: %s", sources.ClientEnabled)
+	_ = level.Info(logger).Log(" - Client State: %s", sources.ClientEnabled)
 	sources.GenericEnabled = *genericEnabled
-	log.Infof(" - Generic State: %s", sources.GenericEnabled)
+	_ = level.Info(logger).Log(" - Generic State: %s", sources.GenericEnabled)
 	sources.LnetEnabled = *lnetEnabled
-	log.Infof(" - Lnet State: %s", sources.LnetEnabled)
+	_ = level.Info(logger).Log(" - Lnet State: %s", sources.LnetEnabled)
 	sources.HealthStatusEnabled = *healthStatusEnabled
-	log.Infof(" - Health State: %s", sources.HealthStatusEnabled)
+	_ = level.Info(logger).Log(" - Health State: %s", sources.HealthStatusEnabled)
 
 	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
 	sourceList, err := loadSources(enabledSources)
 	if err != nil {
-		log.Fatalf("Couldn't load sources: %q", err)
+		_ = level.Error(logger).Log("Couldn't load sources: %q", err)
+		os.Exit(1)
 	}
 
-	log.Infof("Available sources:")
+	_ = level.Info(logger).Log("Available sources:")
+
 	for s := range sourceList {
-		log.Infof(" - %s", s)
+		_ = level.Info(logger).Log(" - %s", s)
 	}
 
 	prometheus.MustRegister(LustreSource{sourceList: sourceList})
-	handler := promhttp.HandlerFor(prometheus.DefaultGatherer, promhttp.HandlerOpts{ErrorLog: log.NewErrorLogger()})
+	//load InstrumentMetricHandler
+	handler := promhttp.InstrumentMetricHandler(prometheus.DefaultRegisterer,
+		promhttp.HandlerFor(prometheus.DefaultGatherer,
+			promhttp.HandlerOpts{
+				ErrorLog: stdlog.New(os.Stderr, "", stdlog.LstdFlags)}))
 
-	http.Handle(*metricsPath, prometheus.InstrumentHandler("prometheus", handler))
+	http.Handle(*metricsPath, handler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var num int
 		num, err = w.Write([]byte(`<html>
@@ -170,13 +180,15 @@ func main() {
 			</body>
 			</html>`))
 		if err != nil {
-			log.Fatal(num, err)
+			_ = level.Error(logger).Log(num, err)
+			os.Exit(1)
 		}
 	})
 
-	log.Infoln("Listening on", *listenAddress)
+	_ = level.Info(logger).Log("Listening on", *listenAddress)
 	err = http.ListenAndServe(*listenAddress, nil)
 	if err != nil {
-		log.Fatal(err)
+		_ = level.Error(logger).Log("Error on Listen", err)
+		os.Exit(1)
 	}
 }
