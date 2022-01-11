@@ -14,6 +14,7 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"github.com/GSI-HPC/lustre_exporter/sources"
 	"gopkg.in/alecthomas/kingpin.v2"
@@ -41,6 +42,8 @@ var (
 		[]string{"source", "result"},
 	)
 	logger = promlog.New(&promlog.Config{})
+	//go:embed VERSION
+	exporter_version string
 )
 
 //LustreSource is a list of all sources that the user would like to collect.
@@ -102,6 +105,7 @@ func init() {
 }
 
 func main() {
+	version.Version = exporter_version
 	kingpin.Version(version.Print("lustre_exporter"))
 	kingpin.HelpFlag.Short('h')
 
