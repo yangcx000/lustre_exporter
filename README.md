@@ -19,7 +19,6 @@ The listed versions below have been successfully used.
 ### Required
 
 * [Golang](https://golang.org/)
-* [Prometheus Utility Tool (promu)](https://github.com/prometheus/promu)
 
 ### Optional
 
@@ -30,15 +29,8 @@ The listed versions below have been successfully used.
 The build has been accomplished with the following versions successfully yet:  
 
 * golang: 1.17.5
-* promu: 0.13.0
 * golangci-lint: 1.43.0
 
-
-### Promu
-
-Use Promu v0.13.0 version:  
-
-`go install github.com/prometheus/promu@v0.13.0`
 
 
 ### Golangci-lint
