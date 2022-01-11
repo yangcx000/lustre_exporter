@@ -42,6 +42,7 @@ build: $(PROMU)
 
 clean:
 	@echo ">> Cleaning up"
+	@$(GO) clean -cache
 	@$(RM) $(TARGET)
 
 .PHONY: all format lint build test clean
