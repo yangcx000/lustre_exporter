@@ -65,13 +65,11 @@ make
 
 ### RPM Package Build
 
-A Centos7 rpm package can be built by following the small dockerfile in build_containersor the rpm Manual in rpm/README.md
-
 ### Build Containers
 
-2 Docker container for building lustre_exporter are provided:
+Two Docker container for building the Lustre Exporter are provided:
 
-1.  A container based on the offical golang:1.17.5-bullseye container image that provides the lustre_exporter binary. 
+1.  A simple container based on the offical golang:1.17.5-bullseye container image that provides the `lustre_exporter` binary. 
 Build it via 
 ```shell
 # from repo base dir run
@@ -80,7 +78,7 @@ docker run -v $PWD:/cpy -it lustre_exporter
 ```
 Your binary is then available in build/lustre_exporter-X.X.X
 
-2. A Centos7 container based on the official Centos7 container image that provides a rpm package containing the lustre_exporter and systemd unit files
+2. A Centos7 container based on the official Centos7 container image that provides a rpm package containing the Lustre Exporter and systemd unit files
 Build it via 
 ```shell
 # from repo base dir run
