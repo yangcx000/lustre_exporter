@@ -65,6 +65,8 @@ make
 
 ### RPM Package Build
 
+A Centos7 rpm package can be built by following the small dockerfile in build_containersor the rpm Manual in rpm/README.md
+
 ### Build Containers
 
 Two Docker container for building the Lustre Exporter are provided:
