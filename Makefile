@@ -13,10 +13,8 @@
 
 GO              ?= GO15VENDOREXPERIMENT=1 go
 GOPATH          := $(firstword $(subst :, ,$(shell $(GO) env GOPATH)))
-PROMU           ?= $(GOPATH)/bin/promu
 GOLINTER        ?= $(GOPATH)/bin/golangci-lint
-#aligncheck and gosimple took unfortunately too long at travisCI
-pkgs            = $(shell $(GO) list ./... | grep -v /vendor/)
+PKGS            = $(shell $(GO) list ./...)
 TARGET          ?= lustre_exporter
 
 PREFIX          ?= $(shell pwd)
@@ -26,18 +24,18 @@ all: format lint build test
 
 test:
 	@echo ">> running tests"
-	@$(GO) test -short $(pkgs)
+	@$(GO) test -short $(PKGS)
 
 format:
 	@echo ">> formatting code"
-	@$(GO) fmt $(pkgs)
+	@$(GO) fmt $(PKGS)
 
 lint: $(GOLINTER)
 	@echo ">> linting code"
 	@$(GOLINTER) run
 
-build: $(PROMU)
-	@echo ">> building binaries"
+build:
+	@echo ">> building binary"
 	@$(GO) build 
 
 clean:
