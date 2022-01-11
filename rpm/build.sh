@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 export VERSION=$(cat VERSION)
 export promdir=prometheus-lustre-exporter-$VERSION
 export builddir=$HOME/rpmbuild
