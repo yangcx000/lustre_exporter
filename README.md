@@ -51,43 +51,48 @@ Latest version:
 
 ### Exporter
 
-For just building the exporter: (in the repo base dir)
+For just building the exporter:
 
-```
-make build
-```
+`make build`
 
 Building the exporter with code testing, formatting and linting:
 
-```
-make
-```
+`make`
 
 ### RPM Package Build
 
-A Centos7 rpm package can be built by following the small dockerfile in build_containersor the rpm Manual in rpm/README.md
+A CentOS7 RPM package can be build by using a 
+1. Shell build script in `rpm/build.sh`
+2. Docker build container, see Docker - Build Container section below.
 
-### Build Containers
+### Docker - Build Container
 
-Two Docker container for building the Lustre Exporter are provided:
+Two Docker build container are provided:  
 
-1.  A simple container based on the offical golang:1.17.5-bullseye container image that provides the `lustre_exporter` binary. 
-Build it via 
+1. A container for building the binary.
+2. A container for building the binary and also creating the RPM package.
+
+**Binary Build Container**
+
+A Debian container is based on the offical golang:1.17.5-bullseye container image for just providing the binary.
+
 ```shell
 # from repo base dir run
-docker build  --tag l_export -f build_containers/Dockerfile .
+docker build  --tag l_export -f docker/Dockerfile .
 docker run -v $PWD:/cpy -it lustre_exporter
 ```
-Your binary is then available in build/lustre_exporter-X.X.X
+The binary will be available in `build/lustre_exporter-X.X.X`.
 
-2. A Centos7 container based on the official Centos7 container image that provides a rpm package containing the Lustre Exporter and systemd unit files
-Build it via 
+**RPM Build Container**
+
+A CentOS7 container is based on the official CentOS7 container image for providing the exporter in a RPM package.
+
 ```shell
 # from repo base dir run
-docker build -t rpm_dock -f build_containers/RPM-Dockerfile .
+docker build -t rpm_dock -f docker/RPM-Dockerfile .
 docker run -v $PWD:/rpm -it rpm_dock
 ```
-Your rpm package is then available in `build/prometheus-lustre-exporter-vX.X.X-X.X.el7.x86_64.rpm`
+The RPM package will be available in `build/prometheus-lustre-exporter-vX.X.X-X.X.el7.x86_64.rpm`.
 
 ## Running
 
