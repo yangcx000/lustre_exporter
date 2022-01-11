@@ -24,9 +24,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/go-kit/log/level"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/common/promlog"
+	"github.com/sirupsen/logrus"
 )
 
 var (
@@ -35,7 +34,7 @@ var (
 	changelogTargetRegexPattern       = regexp.MustCompile(`mdd.([\w\d-]+-MDT[\d]+).changelog_users=`)
 	changelogCurrentIndexRegexPattern = regexp.MustCompile(`current index: (\d+)`)
 	changelogUserRegexPattern         = regexp.MustCompile(`(?ms:(cl\d+)\s+(\d+) \((\d+)\))`)
-	logger                            = promlog.New(&promlog.Config{})
+	log                               = *logrus.StandardLogger()
 )
 
 const (
@@ -88,12 +87,12 @@ func newLustreLctlSource() LustreSource {
 	if LctlCommandMode {
 		_, err := exec.LookPath("lctl")
 		if err != nil {
-			_ = level.Error(logger).Log(err)
+			log.Error(err)
 			return nil
 		}
 		user, err := user.Current()
 		if err != nil {
-			_ = level.Error(logger).Log(err)
+			log.Error(err)
 			return nil
 		}
 		if user.Uid == "0" { // root user
@@ -102,7 +101,7 @@ func newLustreLctlSource() LustreSource {
 		} else {
 			_, err := exec.LookPath("sudo")
 			if err != nil {
-				_ = level.Error(logger).Log(err)
+				log.Error(err)
 				return nil
 			}
 			lctlCmdCall = "sudo"

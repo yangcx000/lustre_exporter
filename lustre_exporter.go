@@ -16,19 +16,18 @@ package main
 import (
 	_ "embed"
 	"fmt"
-	"github.com/GSI-HPC/lustre_exporter/sources"
-	"gopkg.in/alecthomas/kingpin.v2"
 	stdlog "log"
 	"net/http"
 	"os"
 	"sync"
 	"time"
 
-	"github.com/go-kit/log/level"
+	"github.com/GSI-HPC/lustre_exporter/sources"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/common/promlog"
 	"github.com/prometheus/common/version"
+	"github.com/sirupsen/logrus"
+	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 var (
@@ -41,9 +40,9 @@ var (
 		},
 		[]string{"source", "result"},
 	)
-	logger = promlog.New(&promlog.Config{})
 	//go:embed VERSION
 	exporterVersion string
+	log             = *logrus.StandardLogger()
 )
 
 //LustreSource is a list of all sources that the user would like to collect.
@@ -76,10 +75,10 @@ func collectFromSource(name string, s sources.LustreSource, ch chan<- prometheus
 	err := s.Update(ch)
 	duration := time.Since(begin)
 	if err != nil {
-		_ = level.Error(logger).Log("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
+		log.Errorf("source %q failed after %f seconds - %s", name, duration.Seconds(), err)
 		result = "error"
 	} else {
-		_ = level.Debug(logger).Log("source %q succeeded after %f seconds", name, duration.Seconds())
+		log.Debugf("source %q succeeded after %f seconds", name, duration.Seconds())
 	}
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
@@ -125,45 +124,43 @@ func main() {
 
 	kingpin.Parse()
 
-	//set Loglevel
-	var allow = promlog.AllowedLevel{}
-	_ = allow.Set(*logLevel)
-	var config = promlog.Config{Level: &allow, Format: &promlog.AllowedFormat{}}
-	logger = promlog.New(&config)
+	//set log level and text format
+	var level, _ = logrus.ParseLevel(*logLevel)
+	log.SetLevel(level)
+	log.SetFormatter(&logrus.TextFormatter{})
 
-	_ = level.Info(logger).Log("Starting lustre_exporter", version.Info())
-	_ = level.Info(logger).Log("Build context", version.BuildContext())
+	log.Info("Starting lustre_exporter", version.Info())
+	log.Info("Build context", version.BuildContext())
 
-	_ = level.Info(logger).Log("Collector status:")
+	log.Infof("Collector status:")
 	sources.OstEnabled = *ostEnabled
-	_ = level.Info(logger).Log(" - OST State: %s", sources.OstEnabled)
+	log.Infof(" - OST State: %s", sources.OstEnabled)
 	sources.MdtEnabled = *mdtEnabled
-	_ = level.Info(logger).Log(" - MDT State: %s", sources.MdtEnabled)
+	log.Infof(" - MDT State: %s", sources.MdtEnabled)
 	sources.MgsEnabled = *mgsEnabled
-	_ = level.Info(logger).Log(" - MGS State: %s", sources.MgsEnabled)
+	log.Infof(" - MGS State: %s", sources.MgsEnabled)
 	sources.MdsEnabled = *mdsEnabled
-	_ = level.Info(logger).Log(" - MDS State: %s", sources.MdsEnabled)
+	log.Infof(" - MDS State: %s", sources.MdsEnabled)
 	sources.ClientEnabled = *clientEnabled
-	_ = level.Info(logger).Log(" - Client State: %s", sources.ClientEnabled)
+	log.Infof(" - Client State: %s", sources.ClientEnabled)
 	sources.GenericEnabled = *genericEnabled
-	_ = level.Info(logger).Log(" - Generic State: %s", sources.GenericEnabled)
+	log.Infof(" - Generic State: %s", sources.GenericEnabled)
 	sources.LnetEnabled = *lnetEnabled
-	_ = level.Info(logger).Log(" - Lnet State: %s", sources.LnetEnabled)
+	log.Infof(" - Lnet State: %s", sources.LnetEnabled)
 	sources.HealthStatusEnabled = *healthStatusEnabled
-	_ = level.Info(logger).Log(" - Health State: %s", sources.HealthStatusEnabled)
+	log.Infof(" - Health State: %s", sources.HealthStatusEnabled)
 
 	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
 	sourceList, err := loadSources(enabledSources)
 	if err != nil {
-		_ = level.Error(logger).Log("Couldn't load sources: %q", err)
-		os.Exit(1)
+		log.Errorf("Couldn't load sources: %q", err)
 	}
 
-	_ = level.Info(logger).Log("Available sources:")
+	log.Infof("Available sources:")
 
 	for s := range sourceList {
-		_ = level.Info(logger).Log(" - %s", s)
+		log.Infof(" - %s", s)
 	}
 
 	prometheus.MustRegister(LustreSource{sourceList: sourceList})
@@ -184,15 +181,13 @@ func main() {
 			</body>
 			</html>`))
 		if err != nil {
-			_ = level.Error(logger).Log(num, err)
-			os.Exit(1)
+			log.Fatal(num, err)
 		}
 	})
 
-	_ = level.Info(logger).Log("Listening on", *listenAddress)
+	log.Info("Listening on", *listenAddress)
 	err = http.ListenAndServe(*listenAddress, nil)
 	if err != nil {
-		_ = level.Error(logger).Log("Error on Listen", err)
-		os.Exit(1)
+		log.Fatal("Error on Listen", err)
 	}
 }
