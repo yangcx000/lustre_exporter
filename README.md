@@ -20,29 +20,19 @@ go install github.com/GSI-HPC/lustre_exporter@latest
 ```
 ## Prerequisites
 
-The listed versions below have been successfully used.  
-
 ### Required
 
-* [Golang](https://golang.org/)
+[Golang](https://golang.org/)  
 
-### Optional
+Successfully tested with version: 1.17.5
 
-* [Fast linters runner for Go (golangci-lint)](https://github.com/golangci/golangci-lint)
+### Optional for Code Linting
+
+[Fast linters runner for Go (golangci-lint)](https://github.com/golangci/golangci-lint)
+
+`go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest`
 
 ## Building
-
-The build has been accomplished with the following versions successfully yet:  
-
-* golang: 1.17.5
-* golangci-lint: 1.43.0
-
-### Golangci-lint
-
-Use golangci-lint v1.43.0
-Latest version:  
-
-`go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0`
 
 ### Exporter
 
@@ -91,9 +81,7 @@ The RPM package will be available in `build/prometheus-lustre-exporter-vX.X.X-X.
 
 ## Running
 
-```
-./lustre_exporter <flags>
-```
+`./lustre_exporter <flags>`
 
 ### Flags
 
