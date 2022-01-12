@@ -25,7 +25,6 @@ import (
 	"github.com/GSI-HPC/lustre_exporter/sources"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/prometheus/common/version"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
@@ -99,13 +98,8 @@ func loadSources(list []string) (map[string]sources.LustreSource, error) {
 	return sourceList, nil
 }
 
-func init() {
-	prometheus.MustRegister(version.NewCollector("lustre_exporter"))
-}
-
 func main() {
-	version.Version = exporterVersion
-	kingpin.Version(version.Print("lustre_exporter"))
+
 	kingpin.HelpFlag.Short('h')
 
 	var (
@@ -120,17 +114,21 @@ func main() {
 		listenAddress       = kingpin.Flag("web.listen-address", "Address to use to expose Lustre metrics.").Default(":9169").String()
 		metricsPath         = kingpin.Flag("web.telemetry-path", "Path to use to expose Lustre metrics.").Default("/metrics").String()
 		logLevel            = kingpin.Flag("log.level", "Set log level. Valid levels: [debug, info, warn, error]").Default("info").Enum("debug", "info", "warn", "error")
+		printVersion        = kingpin.Flag("version", "Print version.").Short('v').Bool()
 	)
 
 	kingpin.Parse()
 
-	//set log level and text format
+	if *printVersion {
+		fmt.Print(exporterVersion)
+		os.Exit(0)
+	}
+
 	var level, _ = logrus.ParseLevel(*logLevel)
 	log.SetLevel(level)
 	log.SetFormatter(&logrus.TextFormatter{})
 
-	log.Info("Starting lustre_exporter", version.Info())
-	log.Info("Build context", version.BuildContext())
+	log.Info("Starting...")
 
 	log.Infof("Collector status:")
 	sources.OstEnabled = *ostEnabled
