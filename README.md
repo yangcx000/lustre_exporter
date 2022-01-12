@@ -9,6 +9,10 @@
 
 ## Getting
 
+1. Master branch works with golang 1.17.5, tag v2.1.3 is work in progress.
+2. Tagged version 2.1.2 is working with golang 1.15.X.
+
+!!! go install will be available with tagged version **v2.1.3** !!!
 ```
 go install github.com/GSI-HPC/lustre_exporter@latest
 ```
@@ -31,15 +35,12 @@ The build has been accomplished with the following versions successfully yet:
 * golang: 1.17.5
 * golangci-lint: 1.43.0
 
-
-
 ### Golangci-lint
 
 Use golangci-lint v1.43.0
 Latest version:  
 
 `go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0`
-
 
 ### Exporter
 
