@@ -5,7 +5,9 @@
 [![Build Status](https://travis-ci.org/HewlettPackard/lustre_exporter.svg?branch=master)](https://travis-ci.org/HewlettPackard/lustre_exporter)
 -->
 
-[Prometheus](https://prometheus.io/) exporter for Lustre metrics.
+[Prometheus](https://prometheus.io/) exporter for [Lustre](https://www.lustre.org/) metrics.  
+
+Lustre version supported is 2.12.
 
 ## Getting
 
