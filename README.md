@@ -9,40 +9,23 @@
 
 Lustre version supported is 2.12.
 
-## Getting
+## Building
 
 1. Master branch works with golang 1.17.5, tag v2.1.3 is work in progress.
 2. Tagged version 2.1.2 is working with golang 1.15.X.
-
-!!! go install will be available with tagged version **v2.1.3** !!!
-```
-go install github.com/GSI-HPC/lustre_exporter@latest
-```
-## Prerequisites
-
-### Required
-
-[Golang](https://golang.org/)  
-
-Successfully tested with version: 1.17.5
-
-### Optional for Code Linting
-
-[Fast linters runner for Go (golangci-lint)](https://github.com/golangci/golangci-lint)
-
-`go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest`
 
 ## Building
 
 ### Exporter
 
-For just building the exporter:
-
+For just building the exporter:  
 `make build`
 
-Building the exporter with code testing, formatting and linting:
-
+Building the exporter with code testing, formatting and linting:  
 `make`
+
+Required for build with code linting:  
+`go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest`
 
 ### RPM Package Build
 
