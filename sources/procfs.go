@@ -14,6 +14,7 @@
 package sources
 
 import (
+	"errors"
 	"io/ioutil"
 	"path/filepath"
 	"regexp"
@@ -596,9 +597,10 @@ func getJobStatsIOMetrics(jobBlock string, jobID string, promName string, helpTe
 func getJobNum(jobBlock string) (jobID string, err error) {
 	jobID = regexCaptureString("job_id: .*", jobBlock)
 	matched := regexCaptureJobids(jobID)
-	if len(matched) < 2 {
-		return "", nil
+	if len(matched) != 2 {
+		return "", errors.New("No valid jobid found in block: " + jobBlock)
 	}
+	// return strings.TrimSpace(matched[1]), nil
 	return matched[1], nil
 }
 
@@ -658,7 +660,8 @@ func parseJobStatsText(jobStats string, promName string, helpText string, hasMul
 	for _, job := range jobs {
 		jobID, err := getJobNum(job)
 		if err != nil {
-			return nil, err
+			log.Error(err)
+			continue
 		}
 		if hasMultipleVals {
 			jobList, err = getJobStatsOperationMetrics(job, jobID, promName, helpText)

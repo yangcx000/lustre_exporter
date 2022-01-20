@@ -18,18 +18,25 @@ import (
 )
 
 func TestGetJobNum(t *testing.T) {
-	tests := map[string]string{"job_id: 1234": "1234",
+	tests := map[string]string{
+		"job_id: 1234":                      "1234",
 		"job_id: ABCD":                      "ABCD",
-		"job_id:  abc .0123 .-_+ AB.1000  ": "abc .0123 .-_+ AB.1000"}
+		"job_id:  abc .0123 .-_+ AB.1000  ": "abc .0123 .-_+ AB.1000",
+	}
 
 	for testString, expected := range tests {
 		jobID, err := getJobNum(testString)
 		if err != nil {
-			t.Fatal(err)
+			t.Error(err)
 		}
 		if jobID != expected {
-			t.Fatalf("Retrieved an unexpected Job ID. Expected: %s, Got: %s", expected, jobID)
+			t.Errorf("Received an unexpected jobid. Expected: %s, Got: %s", expected, jobID)
 		}
+	}
+
+	_, err := getJobNum("")
+	if err == nil {
+		t.Fatal("An error was expected for an empty jobid, but not received")
 	}
 }
 
