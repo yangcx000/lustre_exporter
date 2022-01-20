@@ -595,13 +595,11 @@ func getJobStatsIOMetrics(jobBlock string, jobID string, promName string, helpTe
 }
 
 func getJobNum(jobBlock string) (jobID string, err error) {
-	jobID = regexCaptureString("job_id: .*", jobBlock)
-	matched := regexCaptureJobids(jobID)
-	if len(matched) != 2 {
+	jobID = regexCaptureJobid(jobBlock)
+	if jobID == "" {
 		return "", errors.New("No valid jobid found in block: " + jobBlock)
 	}
-	// return strings.TrimSpace(matched[1]), nil
-	return matched[1], nil
+	return strings.TrimSpace(jobID), nil
 }
 
 func getJobStatsOperationMetrics(jobBlock string, jobID string, promName string, helpText string) (metricList []lustreJobsMetric, err error) {

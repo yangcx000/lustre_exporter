@@ -18,6 +18,7 @@ import (
 )
 
 func TestGetJobNum(t *testing.T) {
+
 	tests := map[string]string{
 		"job_id: 1234":                      "1234",
 		"job_id: ABCD":                      "ABCD",
@@ -27,16 +28,54 @@ func TestGetJobNum(t *testing.T) {
 	for testString, expected := range tests {
 		jobID, err := getJobNum(testString)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		if jobID != expected {
-			t.Errorf("Received an unexpected jobid. Expected: %s, Got: %s", expected, jobID)
+			t.Fatalf("Received an unexpected jobid. Expected: %s, Got: %s", expected, jobID)
 		}
 	}
 
 	_, err := getJobNum("")
 	if err == nil {
 		t.Fatal("An error was expected for an empty jobid, but not received")
+	}
+
+	testJobBlock := `- job_id:
+  snapshot_time:   1493326943
+  read_bytes:      { samples:         126, unit: bytes, min: 1048576, max: 1048576, sum:       132120576 }
+  write_bytes:     { samples:         262, unit: bytes, min: 1048576, max: 1048576, sum:       274726912 }
+  getattr:         { samples:           1, unit:  reqs }
+  setattr:         { samples:           2, unit:  reqs }
+  punch:           { samples:           3, unit:  reqs }
+  sync:            { samples:           4, unit:  reqs }
+  destroy:         { samples:           5, unit:  reqs }
+  create:          { samples:           6, unit:  reqs }
+  statfs:          { samples:           7, unit:  reqs }
+  get_info:        { samples:           8, unit:  reqs }
+  set_info:        { samples:           9, unit:  reqs }
+  quotactl:        { samples:           10, unit:  reqs }
+  - job_id: 28
+  snapshot_time:   1493326943
+  read_bytes:      { samples:         126, unit: bytes, min: 1048576, max: 1048576, sum:       132120576 }
+  write_bytes:     { samples:         262, unit: bytes, min: 1048576, max: 1048576, sum:       274726912 }
+  getattr:         { samples:           1, unit:  reqs }
+  setattr:         { samples:           2, unit:  reqs }
+  punch:           { samples:           3, unit:  reqs }
+  sync:            { samples:           4, unit:  reqs }
+  destroy:         { samples:           5, unit:  reqs }
+  create:          { samples:           6, unit:  reqs }
+  statfs:          { samples:           7, unit:  reqs }
+  get_info:        { samples:           8, unit:  reqs }
+  set_info:        { samples:           9, unit:  reqs }
+  quotactl:        { samples:           10, unit:  reqs }`
+	expectedJobId := ""
+
+	jobID, err := getJobNum(testJobBlock)
+	if err == nil {
+		t.Fatal("An error was expected for an empty jobid, but not received")
+	}
+	if jobID != expectedJobId {
+		t.Fatalf("Expected empty jobid. Got: %s", jobID)
 	}
 }
 
@@ -196,5 +235,4 @@ func TestGetJobStats(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-
 }
