@@ -46,7 +46,7 @@ A Debian container is based on the offical golang:1.17.5-bullseye container imag
 
 ```shell
 # from repo base dir run
-docker build  --tag l_export -f docker/Dockerfile .
+docker build  --tag lustre_exporter -f docker/Dockerfile .
 docker run -v $PWD:/cpy -it lustre_exporter
 ```
 The binary will be available in `build/lustre_exporter-X.X.X`.
@@ -60,7 +60,7 @@ A CentOS7 container is based on the official CentOS7 container image for providi
 docker build -t rpm_dock -f docker/RPM-Dockerfile .
 docker run -v $PWD:/rpm -it rpm_dock
 ```
-The RPM package will be available in `build/prometheus-lustre-exporter-vX.X.X-X.X.el7.x86_64.rpm`.
+The RPM package will be available in `build/x86_64/prometheus-lustre-exporter-vX.X.X-X.X.el7.x86_64.rpm`.
 
 ## Running
 
