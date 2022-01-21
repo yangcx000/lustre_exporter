@@ -7,12 +7,7 @@
 
 [Prometheus](https://prometheus.io/) exporter for [Lustre](https://www.lustre.org/) metrics.  
 
-Lustre version supported is 2.12.
-
-## Building
-
-1. Master branch works with golang 1.17.5, tag v2.1.3 is work in progress.
-2. Tagged version 2.1.2 is working with golang 1.15.X.
+Supported Lustre version is: 2.12.
 
 ## Building
 
