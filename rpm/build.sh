@@ -5,7 +5,7 @@ export promdir=prometheus-lustre-exporter-$VERSION
 export builddir=$HOME/rpmbuild
 make
 #use VERSION File as Version
-sed -i "s/PROMO_LUSTRE_VERSION/$(cat VERSION)/" rpm/prometheus-lustre-exporter.spec
+sed -i "s/VERSION/$(cat VERSION)/" rpm/prometheus-lustre-exporter.spec
 mkdir -p $builddir/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 mkdir -p $builddir/SOURCES/$promdir/usr/bin
 mkdir -p $builddir/SOURCES/$promdir/usr/lib/systemd/system

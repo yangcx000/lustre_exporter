@@ -3,7 +3,7 @@
 %define        __os_install_post %{_dbpath}/brp-compress
 
 Name:           prometheus-lustre-exporter
-Version:        PROMO_LUSTRE_VERSION
+Version:        VERSION
 Release:        1.0%{?dist}
 Summary:        Prometheus exporter for use with the Lustre parallel filesystem
 Group:          Monitoring

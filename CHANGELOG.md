@@ -5,7 +5,7 @@
 - Remove depencency to Promu
 - Use go.mod tool
 - Use logrus for logging
-- Skip jobstat blocks with empty job_id field set
+- Skip jobstat blocks with empty job\_id field set
 - Simplify regex for capturing jobids
 
 ## [v2.1.2](https://github.com/GSI-HPC/lustre_exporter/releases/tag/2.1.2) (2021-12-10)
