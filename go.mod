@@ -1,9 +1,8 @@
-module github.com/GSI-HPC/lustre_exporter/v2
+module github.com/GSI-HPC/lustre_exporter
 
 go 1.17
 
 require (
-	github.com/GSI-HPC/lustre_exporter v2.1.0+incompatible
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.32.1
 	github.com/sirupsen/logrus v1.6.0
