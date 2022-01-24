@@ -9,6 +9,10 @@
 
 Supported Lustre version is: 2.12.
 
+## Getting
+
+Clone the repository.
+
 ## Building
 
 ### Exporter
