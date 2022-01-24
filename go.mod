@@ -1,4 +1,4 @@
-module github.com/GSI-HPC/lustre_exporter
+module github.com/GSI-HPC/lustre_exporter/v2.1.3
 
 go 1.17
 
