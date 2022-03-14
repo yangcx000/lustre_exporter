@@ -30,16 +30,11 @@ Required for build with code linting:
 
 A CentOS7 RPM package can be build by using a 
 1. Shell build script in `rpm/build.sh`
-2. Docker build container, see Docker - Build Container section below.
+2. Docker build container, see section below.
 
 ### Docker - Build Container
 
-Two Docker build container are provided:  
-
-1. A container for building the binary.
-2. A container for building the binary and also creating the RPM package.
-
-**Binary Build Container**
+#### Binary Build Container
 
 A Debian container is based on the offical golang:1.17.5-bullseye container image for just providing the binary.
 
@@ -50,7 +45,7 @@ docker run -v $PWD:/cpy -it lustre_exporter
 ```
 The binary will be available in `build/lustre_exporter-X.X.X`.
 
-**RPM Build Container**
+#### RPM Build Container
 
 A CentOS7 container is based on the official CentOS7 container image for providing the exporter in a RPM package.
 
