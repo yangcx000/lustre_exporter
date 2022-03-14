@@ -3,7 +3,7 @@ set -e
 export VERSION=$(cat VERSION)
 export promdir=prometheus-lustre-exporter-$VERSION
 export builddir=$HOME/rpmbuild
-make
+make build
 #use VERSION File as Version
 sed -i "s/VERSION/$(cat VERSION)/" rpm/prometheus-lustre-exporter.spec
 mkdir -p $builddir/{BUILD,RPMS,SOURCES,SPECS,SRPMS}

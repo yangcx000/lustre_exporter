@@ -3,10 +3,8 @@ MAINTAINER jknedlik <j.knedlik@gsi.de>
 RUN apt-get update
 COPY . /go/lustre_exporter
 WORKDIR /go/lustre_exporter
-#get linter
-RUN go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.43.0
 #build lustre_exporter
-RUN make
+RUN make build
 #rename /move binary
 RUN mkdir /build
 RUN mv lustre_exporter /build/lustre_exporter-$(cat VERSION)
