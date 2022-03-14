@@ -48,9 +48,7 @@ getent group prometheus >/dev/null || groupadd -r prometheus
 getent passwd prometheus >/dev/null || \
     useradd -r -g prometheus -d /dev/null -s /sbin/nologin \
     -c "Prometheus exporter user" prometheus
-mkdir -p /etc/sudoers.d/
-echo "prometheus ALL = NOPASSWD: /usr/sbin/lctl get_param *" > /etc/sudoers.d/prometheus
-chmod 0440 /etc/sudoers.d/prometheus
+cp etc/sudoers.d/%{name} /etc/sudoers.d/%{name}
 exit 0
 
 %post
@@ -66,5 +64,6 @@ systemctl start %{name}.service
 %files
 %defattr(-,root,root,-)
 %config /etc/sysconfig/prometheus-lustre-exporter.options
+%attr(0440, root, root) /etc/sudoers.d/prometheus-lustre-exporter
 %{_bindir}/lustre_exporter
 %{_unitdir}/%{name}.service

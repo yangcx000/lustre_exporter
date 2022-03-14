@@ -10,9 +10,11 @@ mkdir -p $builddir/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 mkdir -p $builddir/SOURCES/$promdir/usr/bin
 mkdir -p $builddir/SOURCES/$promdir/usr/lib/systemd/system
 mkdir -p $builddir/SOURCES/$promdir/etc/sysconfig
+mkdir -p $builddir/SOURCES/$promdir/etc/sudoers.d
 cp rpm/prometheus-lustre-exporter.spec $builddir/SPECS/
 cp systemd/prometheus-lustre-exporter.service $builddir/SOURCES/$promdir/usr/lib/systemd/system/prometheus-lustre-exporter.service
 cp systemd/prometheus-lustre-exporter.options $builddir/SOURCES/$promdir/etc/sysconfig
+cp sudoers/prometheus-lustre-exporter $builddir/SOURCES/$promdir/etc/sudoers.d
 cp lustre_exporter $builddir/SOURCES/$promdir/usr/bin
 cd $builddir/SOURCES
 tar -czvf $promdir.tar.gz $promdir
