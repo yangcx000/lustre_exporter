@@ -25,7 +25,7 @@ import (
 	"github.com/GSI-HPC/lustre_exporter/sources"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
 )
 
@@ -41,7 +41,6 @@ var (
 	)
 	//go:embed VERSION
 	exporterVersion string
-	log             = *logrus.StandardLogger()
 )
 
 //LustreSource is a list of all sources that the user would like to collect.
@@ -98,6 +97,14 @@ func loadSources(list []string) (map[string]sources.LustreSource, error) {
 	return sourceList, nil
 }
 
+func initLogFile(path string) {
+	logFile, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.SetOutput(logFile)
+}
+
 func main() {
 
 	kingpin.HelpFlag.Short('h')
@@ -114,6 +121,7 @@ func main() {
 		listenAddress       = kingpin.Flag("web.listen-address", "Address to use to expose Lustre metrics.").Default(":9169").String()
 		metricsPath         = kingpin.Flag("web.telemetry-path", "Path to use to expose Lustre metrics.").Default("/metrics").String()
 		logLevel            = kingpin.Flag("log.level", "Set log level. Valid levels: [debug, info, warn, error]").Default("info").Enum("debug", "info", "warn", "error")
+		logFile             = kingpin.Flag("log.file", "Redirect log output to specified file.").Default("").String()
 		printVersion        = kingpin.Flag("version", "Print version.").Short('v').Bool()
 	)
 
@@ -124,9 +132,15 @@ func main() {
 		os.Exit(0)
 	}
 
-	var level, _ = logrus.ParseLevel(*logLevel)
+	var level, _ = log.ParseLevel(*logLevel)
 	log.SetLevel(level)
-	log.SetFormatter(&logrus.TextFormatter{})
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+	})
+
+	if *logFile != "" {
+		initLogFile(*logFile)
+	}
 
 	log.Info("Starting...")
 

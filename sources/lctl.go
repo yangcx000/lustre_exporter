@@ -25,7 +25,7 @@ import (
 	"strings"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/sirupsen/logrus"
+	log "github.com/sirupsen/logrus"
 )
 
 var (
@@ -34,7 +34,6 @@ var (
 	changelogTargetRegexPattern       = regexp.MustCompile(`mdd.([\w\d-]+-MDT[\d]+).changelog_users=`)
 	changelogCurrentIndexRegexPattern = regexp.MustCompile(`current index: (\d+)`)
 	changelogUserRegexPattern         = regexp.MustCompile(`(?ms:(cl\d+)\s+(\d+) \((\d+)\))`)
-	log                               = *logrus.StandardLogger()
 )
 
 const (
