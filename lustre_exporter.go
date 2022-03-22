@@ -139,6 +139,7 @@ func main() {
 	})
 
 	if *logFile != "" {
+		log.Info("Redirecting log output to file: ", *logFile)
 		initLogFile(*logFile)
 	}
 
