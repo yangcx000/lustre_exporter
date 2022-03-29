@@ -81,20 +81,20 @@ func collectFromSource(name string, s sources.LustreSource, ch chan<- prometheus
 	scrapeDurations.WithLabelValues(name, result).Observe(duration.Seconds())
 }
 
-func loadSources(list []string) (map[string]sources.LustreSource, error) {
+func loadSources(list []string) (map[string]sources.LustreSource, []error) {
 	sourceList := map[string]sources.LustreSource{}
+	var errList []error
 	for _, name := range list {
 		fn, ok := sources.Factories[name]
-		if !ok {
-			return nil, fmt.Errorf("source %q not available", name)
+		if ok {
+			if c := fn(); c != nil {
+				sourceList[name] = c
+				continue
+			}
 		}
-		c := fn()
-		if c == nil {
-			return nil, fmt.Errorf("source %q not available", name)
-		}
-		sourceList[name] = c
+		errList = append(errList, fmt.Errorf("source %q not available", name))
 	}
-	return sourceList, nil
+	return sourceList, errList
 }
 
 func initLogFile(path string) {
@@ -165,9 +165,12 @@ func main() {
 
 	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
-	sourceList, err := loadSources(enabledSources)
-	if err != nil {
-		log.Errorf("Couldn't load sources: %q", err)
+	sourceList, errList := loadSources(enabledSources)
+
+	if errList != nil {
+		for _, err := range errList {
+			log.Errorf("Couldn't load source: %s", err)
+		}
 	}
 
 	log.Infof("Available sources:")
@@ -186,7 +189,7 @@ func main() {
 	http.Handle(*metricsPath, handler)
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		var num int
-		num, err = w.Write([]byte(`<html>
+		num, err := w.Write([]byte(`<html>
 			<head><title>Lustre Exporter</title></head>
 			<body>
 			<h1>Lustre Exporter</h1>
@@ -199,7 +202,7 @@ func main() {
 	})
 
 	log.Info("Listening on", *listenAddress)
-	err = http.ListenAndServe(*listenAddress, nil)
+	err := http.ListenAndServe(*listenAddress, nil)
 	if err != nil {
 		log.Fatal("Error on Listen", err)
 	}

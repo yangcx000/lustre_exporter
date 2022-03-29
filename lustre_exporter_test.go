@@ -1718,11 +1718,12 @@ func TestCollector(t *testing.T) {
 		var missingMetrics []promType // Array of metrics that are missing for the given target
 		enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
 
-		sourceList, err := loadSources(enabledSources)
-		if err != nil {
+		sourceList, errList := loadSources(enabledSources)
+
+		if errList != nil {
 			t.Fatal("Unable to load sources")
 		}
-		if err = prometheus.Register(LustreSource{sourceList: sourceList}); err != nil {
+		if err := prometheus.Register(LustreSource{sourceList: sourceList}); err != nil {
 			t.Fatalf("Failed to register for target: %s", target)
 		}
 
