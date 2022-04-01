@@ -58,11 +58,45 @@ func (s *lustreSysSource) generateHealthStatusTemplates(filter string) {
 	}
 }
 
+func (s *lustreSysSource) generateOSTMetricTemplates(filter string) {
+	metricMap := map[string][]lustreHelpStruct{
+		"obdfilter/*-OST*": {
+			{"degraded", "degraded", "Binary indicator as to whether or not the pool is degraded - 0 for not degraded, 1 for degraded", s.gaugeMetric, false, core},
+			{"grant_precreate", "grant_precreate_capacity_bytes", "Maximum space in bytes that clients can preallocate for objects", s.gaugeMetric, false, extended},
+			{"lfsck_speed_limit", "lfsck_speed_limit", "Maximum operations per second LFSCK (Lustre filesystem verification) can run", s.gaugeMetric, false, extended},
+			{"precreate_batch", "precreate_batch", "Maximum number of objects that can be included in a single transaction", s.gaugeMetric, false, extended},
+			{"soft_sync_limit", "soft_sync_limit", "Number of RPCs necessary before triggering a sync", s.gaugeMetric, false, extended},
+			{"sync_journal", "sync_journal_enabled", "Binary indicator as to whether or not the journal is set for asynchronous commits", s.gaugeMetric, false, extended},
+		},
+		"ldlm/namespaces/filter-*": {
+			{"lock_count", "lock_count", "Number of locks", s.gaugeMetric, false, extended},
+			{"lock_timeouts", "lock_timeout", "Number of lock timeouts", s.counterMetric, false, extended},
+			{"contended_locks", "lock_contended", "Number of contended locks", s.gaugeMetric, false, extended},
+			{"contention_seconds", "lock_contention_seconds", "Time in seconds during which locks were contended", s.gaugeMetric, false, extended},
+
+			{"pool/granted", "lock_granted", "Number of granted locks", s.gaugeMetric, false, extended},
+			{"pool/grant_plan", "lock_grant_plan", "Number of planned lock grants per second", s.gaugeMetric, false, extended},
+			{"pool/grant_rate", "lock_grant_rate", "Lock grant rate", s.gaugeMetric, false, extended},
+		},
+	}
+	for path := range metricMap {
+		for _, item := range metricMap[path] {
+			if filter == extended || item.priorityLevel == core {
+				newMetric := newLustreProcMetric(item.filename, item.promName, "ost", path, item.helpText, item.hasMultipleVals, item.metricFunc)
+				s.lustreProcMetrics = append(s.lustreProcMetrics, *newMetric)
+			}
+		}
+	}
+}
+
 func newLustreSysSource() LustreSource {
 	var l lustreSysSource
 	l.basePath = filepath.Join(SysLocation, "fs/lustre")
 	if HealthStatusEnabled != disabled {
 		l.generateHealthStatusTemplates(HealthStatusEnabled)
+	}
+	if OstEnabled != disabled {
+		l.generateOSTMetricTemplates(OstEnabled)
 	}
 	return &l
 }
@@ -84,6 +118,17 @@ func (s *lustreSysSource) Update(ch chan<- prometheus.Metric) (err error) {
 			case "health_check":
 				err = s.parseTextFile(metric.source, "health_check", path, directoryDepth, metric.helpText, metric.promName, func(nodeType string, nodeName string, name string, helpText string, value float64) {
 					ch <- metric.metricFunc([]string{"component", "target"}, []string{nodeType, nodeName}, name, helpText, value)
+				})
+				if err != nil {
+					return err
+				}
+			default:
+				err = s.parseFile(metric.source, single, path, directoryDepth, metric.helpText, metric.promName, metric.hasMultipleVals, func(nodeType string, nodeName string, name string, helpText string, value float64, extraLabel string, extraLabelValue string) {
+					if extraLabelValue == "" {
+						ch <- metric.metricFunc([]string{"component", "target"}, []string{nodeType, nodeName}, name, helpText, value)
+					} else {
+						ch <- metric.metricFunc([]string{"component", "target", extraLabel}, []string{nodeType, nodeName, extraLabelValue}, name, helpText, value)
+					}
 				})
 				if err != nil {
 					return err
@@ -123,6 +168,40 @@ func (s *lustreSysSource) parseTextFile(nodeType string, metricType string, path
 	return nil
 }
 
+func (s *lustreSysSource) parseFile(nodeType string, metricType string, path string, directoryDepth int, helpText string, promName string, hasMultipleVals bool, handler func(string, string, string, string, float64, string, string)) (err error) {
+	_, nodeName, err := parseFileElements(path, directoryDepth)
+	if err != nil {
+		return err
+	}
+	switch metricType {
+	case single:
+		value, err := ioutil.ReadFile(filepath.Clean(path))
+		if err != nil {
+			return err
+		}
+		convertedValue, err := strconv.ParseFloat(strings.TrimSpace(string(value)), 64)
+		if err != nil {
+			return err
+		}
+		handler(nodeType, nodeName, promName, helpText, convertedValue, "", "")
+	}
+	return nil
+}
+
+func (s *lustreSysSource) counterMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
+	return prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, "", name),
+			helpText,
+			labels,
+			nil,
+		),
+		prometheus.CounterValue,
+		value,
+		labelValues...,
+	)
+}
+
 func (s *lustreSysSource) gaugeMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
 	return prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
@@ -132,6 +211,20 @@ func (s *lustreSysSource) gaugeMetric(labels []string, labelValues []string, nam
 			nil,
 		),
 		prometheus.GaugeValue,
+		value,
+		labelValues...,
+	)
+}
+
+func (s *lustreProcFsSource) untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
+	return prometheus.MustNewConstMetric(
+		prometheus.NewDesc(
+			prometheus.BuildFQName(Namespace, "", name),
+			helpText,
+			labels,
+			nil,
+		),
+		prometheus.UntypedValue,
 		value,
 		labelValues...,
 	)

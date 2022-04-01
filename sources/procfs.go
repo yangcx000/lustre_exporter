@@ -142,13 +142,6 @@ func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 			{"tot_dirty", "exports_dirty_total", "Total number of exports that have been marked dirty", s.counterMetric, false, core},
 			{"tot_granted", "exports_granted_total", "Total number of exports that have been marked granted", s.counterMetric, false, core},
 			{"tot_pending", "exports_pending_total", "Total number of exports that have been marked pending", s.counterMetric, false, core},
-			// TODO: Move metrics to /sys/fs/lustre
-			// {"degraded", "degraded", "Binary indicator as to whether or not the pool is degraded - 0 for not degraded, 1 for degraded", s.gaugeMetric, false, core},
-			// {"grant_precreate", "grant_precreate_capacity_bytes", "Maximum space in bytes that clients can preallocate for objects", s.gaugeMetric, false, extended},
-			// {"lfsck_speed_limit", "lfsck_speed_limit", "Maximum operations per second LFSCK (Lustre filesystem verification) can run", s.gaugeMetric, false, extended},
-			// {"precreate_batch", "precreate_batch", "Maximum number of objects that can be included in a single transaction", s.gaugeMetric, false, extended},
-			// {"soft_sync_limit", "soft_sync_limit", "Number of RPCs necessary before triggering a sync", s.gaugeMetric, false, extended},
-			// {"sync_journal", "sync_journal_enabled", "Binary indicator as to whether or not the journal is set for asynchronous commits", s.gaugeMetric, false, extended},
 		},
 		"osd-*/*-OST*": {
 			{"blocksize", "blocksize_bytes", "Filesystem block size in bytes", s.gaugeMetric, false, core},
@@ -163,24 +156,6 @@ func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 			{"kbytesavail", "available_kilobytes", "Number of kilobytes readily available in the pool", s.gaugeMetric, false, core},
 			{"kbytestotal", "capacity_kilobytes", "Capacity of the pool in kilobytes", s.gaugeMetric, false, core},
 		},
-		// TODO: Move metrics to /sys/fs/lustre
-		// "ldlm/namespaces/filter-*": {
-		// 	{"lock_count", "lock_count_total", "Number of locks", s.counterMetric, false, extended},
-		// 	{"lock_timeouts", "lock_timeout_total", "Number of lock timeouts", s.counterMetric, false, extended},
-		// 	{"contended_locks", "lock_contended_total", "Number of contended locks", s.counterMetric, false, extended},
-		// 	{"contention_seconds", "lock_contention_seconds_total", "Time in seconds during which locks were contended", s.counterMetric, false, extended},
-		// 	{"pool/cancel", "lock_cancel_total", "Total number of cancelled locks", s.counterMetric, false, extended},
-		// 	{"pool/cancel_rate", "lock_cancel_rate", "Lock cancel rate", s.gaugeMetric, false, extended},
-		// 	{"pool/grant", "locks_grant_total", "Total number of granted locks", s.counterMetric, false, extended},
-		// 	{"pool/granted", "locks_granted", "Number of granted less cancelled locks", s.untypedMetric, false, extended},
-		// 	{"pool/grant_plan", "lock_grant_plan", "Number of planned lock grants per second", s.gaugeMetric, false, extended},
-		// 	{"pool/grant_rate", "lock_grant_rate", "Lock grant rate", s.gaugeMetric, false, extended},
-		// 	{"pool/recalc_freed", "recalc_freed_total", "Number of locks that have been freed", s.counterMetric, false, extended},
-		// 	{"pool/recalc_timing", "recalc_timing_seconds_total", "Number of seconds spent locked", s.counterMetric, false, extended},
-		// 	{"pool/shrink_freed", "shrink_freed_total", "Number of shrinks that have been freed", s.counterMetric, false, extended},
-		// 	{"pool/shrink_request", "shrink_requests_total", "Number of shrinks that have been requested", s.counterMetric, false, extended},
-		// 	{"pool/slv", "server_lock_volume", "Current value for server lock volume (SLV)", s.gaugeMetric, false, extended},
-		// },
 	}
 	for path := range metricMap {
 		for _, item := range metricMap[path] {
@@ -798,18 +773,3 @@ func (s *lustreProcFsSource) gaugeMetric(labels []string, labelValues []string, 
 		labelValues...,
 	)
 }
-
-// TODO: Move with metric "pool/granted" to "/sys/fs/lustre/" path
-// func (s *lustreProcFsSource) untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-// 	return prometheus.MustNewConstMetric(
-// 		prometheus.NewDesc(
-// 			prometheus.BuildFQName(Namespace, "", name),
-// 			helpText,
-// 			labels,
-// 			nil,
-// 		),
-// 		prometheus.UntypedValue,
-// 		value,
-// 		labelValues...,
-// 	)
-// }
