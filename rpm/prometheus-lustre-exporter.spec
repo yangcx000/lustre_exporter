@@ -49,6 +49,13 @@ getent passwd prometheus >/dev/null || \
     useradd -r -g prometheus -d /dev/null -s /sbin/nologin \
     -c "Prometheus exporter user" prometheus
 cp etc/sudoers.d/%{name} /etc/sudoers.d/%{name}
+
+PROM_LOG="/var/log/prometheus"
+if [ ! -d "${PROM_LOG}" ]; then
+    mkdir -p "${PROM_LOG}"
+    chmod 700 "${PROM_LOG}"
+    chown prometheus:prometheus "${PROM_LOG}"
+fi
 exit 0
 
 %post

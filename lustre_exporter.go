@@ -98,7 +98,7 @@ func loadSources(list []string) (map[string]sources.LustreSource, []error) {
 }
 
 func initLogFile(path string) {
-	logFile, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666)
+	logFile, err := os.OpenFile(path, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0600)
 	if err != nil {
 		log.Fatal(err)
 	}
