@@ -23,6 +23,7 @@ func TestGetJobNum(t *testing.T) {
 		"job_id: 1234":                      "1234",
 		"job_id: ABCD":                      "ABCD",
 		"job_id:  abc .0123 .-_+ AB.1000  ": "abc .0123 .-_+ AB.1000",
+		"job_id:            kworker/86:1.0": "kworker/86:1.0",
 	}
 
 	for testString, expected := range tests {
@@ -225,14 +226,5 @@ func TestGetJobStats(t *testing.T) {
 	}
 	if metricList[5].title != testPromName {
 		t.Fatalf("Retrieved an unexpected name. Expected: %s, Got: %s", testPromName, metricList[5].title)
-	}
-
-	testJobBlock = "- job_id:           31"
-	testPromName = "job_write_bytes_total"
-	testHelpText = writeTotalHelp
-
-	_, err = getJobStatsIOMetrics(testJobBlock, testJobID, testPromName, testHelpText)
-	if err != nil {
-		t.Fatal(err)
 	}
 }
