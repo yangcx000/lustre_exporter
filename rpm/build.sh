@@ -11,6 +11,7 @@ mkdir -p $builddir/SOURCES/$promdir/usr/bin
 mkdir -p $builddir/SOURCES/$promdir/usr/lib/systemd/system
 mkdir -p $builddir/SOURCES/$promdir/etc/sysconfig
 mkdir -p $builddir/SOURCES/$promdir/etc/sudoers.d
+mkdir -p $builddir/SOURCES/$promdir/var/log/prometheus-lustre-exporter
 cp rpm/prometheus-lustre-exporter.spec $builddir/SPECS/
 cp systemd/prometheus-lustre-exporter.service $builddir/SOURCES/$promdir/usr/lib/systemd/system/prometheus-lustre-exporter.service
 cp systemd/prometheus-lustre-exporter.options $builddir/SOURCES/$promdir/etc/sysconfig

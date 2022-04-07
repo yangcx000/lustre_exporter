@@ -33,7 +33,6 @@ The Lustre exporter for Prometheus will expose all Lustre procfs and procsys dat
 
 %install
 rm -rf %{buildroot}
-mkdir -p  %{buildroot}
 mkdir -p %{buildroot}%{_unitdir}/
 cp usr/lib/systemd/system/%{name}.service %{buildroot}%{_unitdir}/
 
@@ -49,13 +48,6 @@ getent passwd prometheus >/dev/null || \
     useradd -r -g prometheus -d /dev/null -s /sbin/nologin \
     -c "Prometheus exporter user" prometheus
 cp etc/sudoers.d/%{name} /etc/sudoers.d/%{name}
-
-PROM_LOG="/var/log/prometheus"
-if [ ! -d "${PROM_LOG}" ]; then
-    mkdir -p "${PROM_LOG}"
-    chmod 700 "${PROM_LOG}"
-    chown prometheus:prometheus "${PROM_LOG}"
-fi
 exit 0
 
 %post
@@ -74,3 +66,4 @@ systemctl start %{name}.service
 %attr(0440, root, root) /etc/sudoers.d/prometheus-lustre-exporter
 %{_bindir}/lustre_exporter
 %{_unitdir}/%{name}.service
+%dir %attr(0700, prometheus, prometheus) /var/log/prometheus-lustre-exporter
