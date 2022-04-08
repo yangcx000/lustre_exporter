@@ -228,3 +228,53 @@ func TestGetJobStats(t *testing.T) {
 		t.Fatalf("Retrieved an unexpected name. Expected: %s, Got: %s", testPromName, metricList[5].title)
 	}
 }
+
+func TestJobStatBlockIds(t *testing.T) {
+
+	testJobBlocks := `- job_id: 67
+	snapshot_time:   1493326943
+	read_bytes:      { samples:         126, unit: bytes, min: 1048576, max: 1048576, sum:       132120576 }
+	write_bytes:     { samples:         262, unit: bytes, min: 1048576, max: 1048576, sum:       274726912 }
+	getattr:         { samples:           1, unit:  reqs }
+	setattr:         { samples:           2, unit:  reqs }
+	punch:           { samples:           3, unit:  reqs }
+	sync:            { samples:           4, unit:  reqs }
+	destroy:         { samples:           5, unit:  reqs }
+	create:          { samples:           6, unit:  reqs }
+	statfs:          { samples:           7, unit:  reqs }
+	get_info:        { samples:           8, unit:  reqs }
+	set_info:        { samples:           9, unit:  reqs }
+	quotactl:        { samples:           10, unit:  reqs }
+	- job_id: 28
+	snapshot_time:   1493326943
+	read_bytes:      { samples:         126, unit: bytes, min: 1048576, max: 1048576, sum:       132120576 }
+	write_bytes:     { samples:         262, unit: bytes, min: 1048576, max: 1048576, sum:       274726912 }
+	getattr:         { samples:           1, unit:  reqs }
+	setattr:         { samples:           2, unit:  reqs }
+	punch:           { samples:           3, unit:  reqs }
+	sync:            { samples:           4, unit:  reqs }
+	destroy:         { samples:           5, unit:  reqs }
+	create:          { samples:           6, unit:  reqs }
+	statfs:          { samples:           7, unit:  reqs }
+	get_info:        { samples:           8, unit:  reqs }
+	set_info:        { samples:           9, unit:  reqs }
+	quotactl:        { samples:           10, unit:  reqs }`
+
+	expectedJobIds := []string{"67", "28"}
+
+	matchedJobBlocks := regexCaptureJobStats(testJobBlocks)
+
+	if l := len(matchedJobBlocks); l != 2 {
+		t.Fatalf("Retrieved an unexpected number of items. Expected: %d, Got: %d", 2, l)
+	}
+
+	for index, expected := range expectedJobIds {
+		jobId, err := getJobNum(matchedJobBlocks[index])
+		if err != nil {
+			t.Fatal(err)
+		}
+		if jobId != expected {
+			t.Fatalf("Received an unexpected jobId. Expected: %s, Got: %s", expected, jobId)
+		}
+	}
+}
