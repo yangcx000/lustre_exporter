@@ -45,7 +45,7 @@ type lustreSysSource struct {
 func (s *lustreSysSource) generateHealthStatusTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"": {
-			{"health_check", "health_check", "Current health status for the indicated instance: " + healthCheckHealthy + " refers to 'healthy', " + healthCheckUnhealthy + " refers to 'unhealthy'", s.gaugeMetric, false, core},
+			{"health_check", "health_check", "Current health status for the indicated instance: " + healthCheckHealthy + " refers to 'healthy', " + healthCheckUnhealthy + " refers to 'unhealthy'", gaugeMetric, false, core},
 		},
 	}
 	for path := range metricMap {
@@ -61,22 +61,22 @@ func (s *lustreSysSource) generateHealthStatusTemplates(filter string) {
 func (s *lustreSysSource) generateOSTMetricTemplates(filter string) {
 	metricMap := map[string][]lustreHelpStruct{
 		"obdfilter/*-OST*": {
-			{"degraded", "degraded", "Binary indicator as to whether or not the pool is degraded - 0 for not degraded, 1 for degraded", s.gaugeMetric, false, core},
-			{"grant_precreate", "grant_precreate_capacity_bytes", "Maximum space in bytes that clients can preallocate for objects", s.gaugeMetric, false, extended},
-			{"lfsck_speed_limit", "lfsck_speed_limit", "Maximum operations per second LFSCK (Lustre filesystem verification) can run", s.gaugeMetric, false, extended},
-			{"precreate_batch", "precreate_batch", "Maximum number of objects that can be included in a single transaction", s.gaugeMetric, false, extended},
-			{"soft_sync_limit", "soft_sync_limit", "Number of RPCs necessary before triggering a sync", s.gaugeMetric, false, extended},
-			{"sync_journal", "sync_journal_enabled", "Binary indicator as to whether or not the journal is set for asynchronous commits", s.gaugeMetric, false, extended},
+			{"degraded", "degraded", "Binary indicator as to whether or not the pool is degraded - 0 for not degraded, 1 for degraded", gaugeMetric, false, core},
+			{"grant_precreate", "grant_precreate_capacity_bytes", "Maximum space in bytes that clients can preallocate for objects", gaugeMetric, false, extended},
+			{"lfsck_speed_limit", "lfsck_speed_limit", "Maximum operations per second LFSCK (Lustre filesystem verification) can run", gaugeMetric, false, extended},
+			{"precreate_batch", "precreate_batch", "Maximum number of objects that can be included in a single transaction", gaugeMetric, false, extended},
+			{"soft_sync_limit", "soft_sync_limit", "Number of RPCs necessary before triggering a sync", gaugeMetric, false, extended},
+			{"sync_journal", "sync_journal_enabled", "Binary indicator as to whether or not the journal is set for asynchronous commits", gaugeMetric, false, extended},
 		},
 		"ldlm/namespaces/filter-*": {
-			{"lock_count", "lock_count", "Number of locks", s.gaugeMetric, false, extended},
-			{"lock_timeouts", "lock_timeout", "Number of lock timeouts", s.counterMetric, false, extended},
-			{"contended_locks", "lock_contended", "Number of contended locks", s.gaugeMetric, false, extended},
-			{"contention_seconds", "lock_contention_seconds", "Time in seconds during which locks were contended", s.gaugeMetric, false, extended},
+			{"lock_count", "lock_count", "Number of locks", gaugeMetric, false, extended},
+			{"lock_timeouts", "lock_timeout", "Number of lock timeouts", counterMetric, false, extended},
+			{"contended_locks", "lock_contended", "Number of contended locks", gaugeMetric, false, extended},
+			{"contention_seconds", "lock_contention_seconds", "Time in seconds during which locks were contended", gaugeMetric, false, extended},
 
-			{"pool/granted", "lock_granted", "Number of granted locks", s.gaugeMetric, false, extended},
-			{"pool/grant_plan", "lock_grant_plan", "Number of planned lock grants per second", s.gaugeMetric, false, extended},
-			{"pool/grant_rate", "lock_grant_rate", "Lock grant rate", s.gaugeMetric, false, extended},
+			{"pool/granted", "lock_granted", "Number of granted locks", gaugeMetric, false, extended},
+			{"pool/grant_plan", "lock_grant_plan", "Number of planned lock grants per second", gaugeMetric, false, extended},
+			{"pool/grant_rate", "lock_grant_rate", "Lock grant rate", gaugeMetric, false, extended},
 		},
 	}
 	for path := range metricMap {
@@ -186,46 +186,4 @@ func (s *lustreSysSource) parseFile(nodeType string, metricType string, path str
 		handler(nodeType, nodeName, promName, helpText, convertedValue, "", "")
 	}
 	return nil
-}
-
-func (s *lustreSysSource) counterMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-	return prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, "", name),
-			helpText,
-			labels,
-			nil,
-		),
-		prometheus.CounterValue,
-		value,
-		labelValues...,
-	)
-}
-
-func (s *lustreSysSource) gaugeMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-	return prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, "", name),
-			helpText,
-			labels,
-			nil,
-		),
-		prometheus.GaugeValue,
-		value,
-		labelValues...,
-	)
-}
-
-func (s *lustreProcFsSource) untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-	return prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, "", name),
-			helpText,
-			labels,
-			nil,
-		),
-		prometheus.UntypedValue,
-		value,
-		labelValues...,
-	)
 }

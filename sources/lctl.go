@@ -172,7 +172,7 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 		return nil, err
 	}
 
-	metricList[0] = s.counterMetric(
+	metricList[0] = counterMetric(
 		[]string{"component", "target"},
 		[]string{"mdt", target},
 		"changelog_current_index",
@@ -194,7 +194,7 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 			return nil, err
 		}
 
-		metric := s.counterMetric(
+		metric := counterMetric(
 			[]string{"component", "target", "id"},
 			[]string{"mdt", target, id},
 			"changelog_user_index",
@@ -202,7 +202,7 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 			index)
 		metricList = append(metricList, metric)
 
-		metric = s.gaugeMetric(
+		metric = gaugeMetric(
 			[]string{"component", "target", "id"},
 			[]string{"mdt", target, id},
 			"changelog_user_idle_time",
@@ -212,32 +212,4 @@ func (s *lustreLctlSource) createMDTChangelogUsersMetrics(text string) ([]promet
 	}
 
 	return metricList, nil
-}
-
-func (s *lustreLctlSource) counterMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-	return prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, "", name),
-			helpText,
-			labels,
-			nil,
-		),
-		prometheus.CounterValue,
-		value,
-		labelValues...,
-	)
-}
-
-func (s *lustreLctlSource) gaugeMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
-	return prometheus.MustNewConstMetric(
-		prometheus.NewDesc(
-			prometheus.BuildFQName(Namespace, "", name),
-			helpText,
-			labels,
-			nil,
-		),
-		prometheus.GaugeValue,
-		value,
-		labelValues...,
-	)
 }
