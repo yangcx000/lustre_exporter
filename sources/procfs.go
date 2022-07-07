@@ -142,6 +142,7 @@ func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 			{"tot_dirty", "exports_dirty_total", "Total number of exports that have been marked dirty", counterMetric, false, core},
 			{"tot_granted", "exports_granted_total", "Total number of exports that have been marked granted", counterMetric, false, core},
 			{"tot_pending", "exports_pending_total", "Total number of exports that have been marked pending", counterMetric, false, core},
+            // FIXME(yangchunxin): replace 'tcp' with '*' to support various net protocals
 			{"exports/*@tcp/stats", "client_read_samples_total", readSamplesHelp, counterMetric, false, core},
 			{"exports/*@tcp/stats", "client_read_minimum_size_bytes", readMinimumHelp, gaugeMetric, false, extended},
 			{"exports/*@tcp/stats", "client_read_maximum_size_bytes", readMaximumHelp, gaugeMetric, false, extended},
@@ -190,6 +191,7 @@ func (s *lustreProcFsSource) generateMDTMetricTemplates(filter string) {
 			{mdStats, "stats_total", statsHelp, counterMetric, true, core},
 			{"num_exports", "exports_total", "Total number of times the pool has been exported", counterMetric, false, core},
 			{"job_stats", "job_stats_total", jobStatsHelp, counterMetric, true, core},
+            // FIXME(yangchunxin): replace 'tcp' with '*' to support various net protocals
 			{"exports/*@tcp/stats", "stats_total", statsHelp, counterMetric, true, core},
 		},
 	}
@@ -396,7 +398,6 @@ func (s *lustreProcFsSource) Update(ch chan<- prometheus.Metric) (err error) {
 					}
 				}
 				err = s.parseFile(metric.source, metricType, path, directoryDepth, metric.helpText, metric.promName, metric.hasMultipleVals, func(nodeType string, nodeName string, name string, helpText string, value float64, extraLabel string, extraLabelValue string) {
-					//log.Infof("client:%s, helpText:%s, promName:%s, filename:%s, component:%s, target:%s, extraLabel:%s, name:%s, value:%f\n", clientIP, metric.helpText, metric.promName, metric.filename, nodeType, nodeName, extraLabelValue, name, value)
 					labels := []string{"component", "target"}
 					labelValues := []string{nodeType, nodeName}
 					if len(clientIP) != 0 {
