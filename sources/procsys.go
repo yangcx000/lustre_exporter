@@ -92,7 +92,8 @@ func (s *lustreProcSysSource) generateLNETTemplates(filter string) {
 
 func newLustreProcSysSource() LustreSource {
 	var l lustreProcSysSource
-	l.basePath = filepath.Join(ProcLocation, "sys")
+	// FIXME(yangchunxin): refactor procsys to kerneldebug
+	l.basePath = "/sys/kernel/debug" //filepath.Join(ProcLocation, "sys")
 	if LnetEnabled != disabled {
 		l.generateLNETTemplates(LnetEnabled)
 	}
