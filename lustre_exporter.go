@@ -110,7 +110,7 @@ func main() {
 	kingpin.HelpFlag.Short('h')
 
 	var (
-		clientEnabled       = kingpin.Flag("collector.client", "Set client metric level. Valid levels: [extended, core, disabled]").Default("extended").Enum("extended", "core", "disabled")
+		clientEnabled       = kingpin.Flag("collector.client", "Set client metric level. Valid levels: [extended, core, disabled]").Default("disabled").Enum("extended", "core", "disabled")
 		genericEnabled      = kingpin.Flag("collector.generic", "Set generic metric level. Valid levels: [extended, core, disabled]").Default("extended").Enum("extended", "core", "disabled")
 		lnetEnabled         = kingpin.Flag("collector.lnet", "Set LNET metric level. Valid levels: [extended, core, disabled]").Default("extended").Enum("extended", "core", "disabled")
 		mdsEnabled          = kingpin.Flag("collector.mds", "Set MDS metric level. Valid levels: [extended, core, disabled]").Default("extended").Enum("extended", "core", "disabled")

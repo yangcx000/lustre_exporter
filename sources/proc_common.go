@@ -160,3 +160,15 @@ func convertToBytes(s string) string {
 	byteVal *= uint64(multiplier)
 	return strconv.FormatUint(byteVal, 10)
 }
+
+func parseClientIP(path string) (string, error) {
+	pathElements := strings.Split(path, "/")
+	if len(pathElements) < 2 {
+		return "", fmt.Errorf("path did not return at least two element")
+	}
+	elements := strings.Split(pathElements[len(pathElements)-2], "@")
+	if len(elements) < 1 {
+		return "", fmt.Errorf("path did not return at least one element")
+	}
+	return elements[0], nil
+}
