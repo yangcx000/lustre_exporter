@@ -190,7 +190,7 @@ func (s *lustreProcFsSource) generateMDTMetricTemplates(filter string) {
 			{mdStats, "stats_total", statsHelp, counterMetric, true, core},
 			{"num_exports", "exports_total", "Total number of times the pool has been exported", counterMetric, false, core},
 			{"job_stats", "job_stats_total", jobStatsHelp, counterMetric, true, core},
-			{"exports/*@tcp/md_stats", "stats_total", statsHelp, counterMetric, true, core},
+			{"exports/*@tcp/stats", "stats_total", statsHelp, counterMetric, true, core},
 		},
 	}
 	for path := range metricMap {
@@ -390,12 +390,13 @@ func (s *lustreProcFsSource) Update(ch chan<- prometheus.Metric) (err error) {
 					if metric.source == "mdt" {
 						metricType = mdStats
 					}
-					clientIP, err = parseClientIP(metric.filename)
+					clientIP, err = parseClientIP(path)
 					if err != nil {
 						return err
 					}
 				}
 				err = s.parseFile(metric.source, metricType, path, directoryDepth, metric.helpText, metric.promName, metric.hasMultipleVals, func(nodeType string, nodeName string, name string, helpText string, value float64, extraLabel string, extraLabelValue string) {
+					//log.Infof("client:%s, helpText:%s, promName:%s, filename:%s, component:%s, target:%s, extraLabel:%s, name:%s, value:%f\n", clientIP, metric.helpText, metric.promName, metric.filename, nodeType, nodeName, extraLabelValue, name, value)
 					labels := []string{"component", "target"}
 					labelValues := []string{nodeType, nodeName}
 					if len(clientIP) != 0 {
@@ -438,6 +439,10 @@ func getStatsOperationMetrics(statsFile string, promName string, helpText string
 		{pattern: "set_info_async", index: 1},
 		{pattern: "connect", index: 1},
 		{pattern: "ping", index: 1},
+		{pattern: "mkdir", index: 1},
+		{pattern: "set_info", index: 1},
+		{pattern: "mknod", index: 1},
+		{pattern: "sync", index: 1},
 	}
 	for _, operation := range operationSlice {
 		opStat := regexCaptureString(operation.pattern+" .*", statsFile)

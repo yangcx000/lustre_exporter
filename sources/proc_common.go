@@ -166,7 +166,7 @@ func parseClientIP(path string) (string, error) {
 	if len(pathElements) < 2 {
 		return "", fmt.Errorf("path did not return at least two element")
 	}
-	elements := strings.Split(pathElements[1], "@")
+	elements := strings.Split(pathElements[len(pathElements)-2], "@")
 	if len(elements) < 1 {
 		return "", fmt.Errorf("path did not return at least one element")
 	}
