@@ -583,6 +583,65 @@
         },
         {
             "datasource": "Prometheus",
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 7,
+                "w": 24,
+                "x": 0,
+                "y": 52
+            },
+            "id": 61,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "count(count by(client) (lustre_client_stats_total))",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Clients",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
             "fieldConfig": {
                 "defaults": {
                     "color": {
@@ -643,7 +702,7 @@
                 "h": 13,
                 "w": 24,
                 "x": 0,
-                "y": 52
+                "y": 59
             },
             "id": 46,
             "options": {
@@ -745,7 +804,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 0,
-                "y": 65
+                "y": 72
             },
             "id": 47,
             "options": {
@@ -797,7 +856,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 12,
-                "y": 65
+                "y": 72
             },
             "hiddenSeries": false,
             "id": 50,
@@ -918,7 +977,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 81
+                "y": 88
             },
             "hiddenSeries": false,
             "id": 52,
@@ -1030,7 +1089,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 81
+                "y": 88
             },
             "hiddenSeries": false,
             "id": 4,
@@ -1142,7 +1201,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 93
+                "y": 100
             },
             "hiddenSeries": false,
             "id": 14,
@@ -1279,7 +1338,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 93
+                "y": 100
             },
             "hiddenSeries": false,
             "id": 53,
@@ -1432,7 +1491,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 105
+                "y": 112
             },
             "id": 40,
             "options": {
@@ -1490,7 +1549,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 105
+                "y": 112
             },
             "id": 41,
             "options": {
@@ -1548,7 +1607,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 113
+                "y": 120
             },
             "id": 36,
             "options": {
@@ -1606,7 +1665,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 113
+                "y": 120
             },
             "id": 37,
             "options": {
@@ -1664,7 +1723,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 121
+                "y": 128
             },
             "id": 7,
             "links": [],
@@ -1728,7 +1787,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 121
+                "y": 128
             },
             "id": 2,
             "links": [],
@@ -1792,7 +1851,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 133
+                "y": 140
             },
             "id": 54,
             "links": [],
@@ -1856,7 +1915,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 133
+                "y": 140
             },
             "id": 55,
             "links": [],
@@ -1904,7 +1963,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 145
+                "y": 152
             },
             "hiddenSeries": false,
             "id": 17,
@@ -2020,7 +2079,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 145
+                "y": 152
             },
             "hiddenSeries": false,
             "id": 51,
@@ -2156,7 +2215,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 155
+                "y": 162
             },
             "id": 57,
             "options": {
@@ -2228,7 +2287,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 155
+                "y": 162
             },
             "id": 59,
             "options": {
@@ -2341,7 +2400,7 @@
         ]
     },
     "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
     },
     "timepicker": {
@@ -2370,5 +2429,5 @@
     "timezone": "browser",
     "title": "Lustre Overview New",
     "uid": "HPA5L-wii",
-    "version": 41
+    "version": 43
 }
