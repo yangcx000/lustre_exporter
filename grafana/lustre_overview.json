@@ -84,7 +84,7 @@
                     "refId": "A"
                 }
             ],
-            "title": "Filesystem Capacity",
+            "title": "Filesystem capacity",
             "type": "gauge"
         },
         {
@@ -142,7 +142,7 @@
                     "refId": "A"
                 }
             ],
-            "title": "Filesystem Capacity Used",
+            "title": "Filesystem capacity used",
             "type": "gauge"
         },
         {
@@ -198,7 +198,7 @@
                     "expr": "1 - sum(lustre_free_kilobytes{target=~\"$fs-OST.*\"})/sum(lustre_capacity_kilobytes{target=~\"$fs-OST.*\"})",
                     "hide": false,
                     "interval": "",
-                    "legendFormat": "Capacity",
+                    "legendFormat": "capacity",
                     "refId": "A"
                 },
                 {
@@ -206,7 +206,7 @@
                     "expr": "1 - (sum(lustre_inodes_free{target=~\"$fs-MDT.*\"})/sum(lustre_inodes_maximum{target=~\"$fs-MDT.*\"}))",
                     "hide": false,
                     "interval": "",
-                    "legendFormat": "MDT Inodes",
+                    "legendFormat": "meta inodes",
                     "refId": "B"
                 },
                 {
@@ -214,13 +214,13 @@
                     "expr": "1 - (sum(lustre_inodes_free{target=~\"$fs-OST.*\"})/sum(lustre_inodes_maximum{target=~\"$fs-OST.*\"}))",
                     "hide": false,
                     "interval": "",
-                    "legendFormat": "OST Inodes",
+                    "legendFormat": "data inodes",
                     "refId": "C"
                 }
             ],
             "timeFrom": null,
             "timeShift": null,
-            "title": "Filesystem Utilization",
+            "title": "Filesystem utilization",
             "type": "gauge"
         },
         {
@@ -352,8 +352,8 @@
             "fill": 3,
             "fillGradient": 0,
             "gridPos": {
-                "h": 12,
-                "w": 24,
+                "h": 11,
+                "w": 12,
                 "x": 0,
                 "y": 28
             },
@@ -471,10 +471,10 @@
             "fill": 1,
             "fillGradient": 0,
             "gridPos": {
-                "h": 12,
-                "w": 24,
-                "x": 0,
-                "y": 40
+                "h": 11,
+                "w": 12,
+                "x": 12,
+                "y": 28
             },
             "hiddenSeries": false,
             "id": 16,
@@ -608,10 +608,10 @@
                 "overrides": []
             },
             "gridPos": {
-                "h": 7,
-                "w": 24,
+                "h": 8,
+                "w": 12,
                 "x": 0,
-                "y": 52
+                "y": 39
             },
             "id": 61,
             "options": {
@@ -632,13 +632,98 @@
                 {
                     "exemplar": true,
                     "expr": "count(count by(client) (lustre_client_stats_total))",
+                    "hide": false,
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                },
+                {
+                    "exemplar": true,
+                    "expr": "lustre_client_stats_total",
+                    "hide": true,
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "B"
+                }
+            ],
+            "title": "Clients",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "description": "",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "align": "center",
+                        "displayMode": "color-text"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 39
+            },
+            "id": 62,
+            "options": {
+                "showHeader": false
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "group by(client)(lustre_client_stats_total)",
+                    "format": "table",
+                    "hide": false,
+                    "instant": true,
                     "interval": "",
                     "legendFormat": "",
                     "refId": "A"
                 }
             ],
-            "title": "Clients",
-            "type": "gauge"
+            "title": "Client IPs",
+            "transformations": [
+                {
+                    "id": "organize",
+                    "options": {
+                        "excludeByName": {
+                            "Time": true,
+                            "Value": true,
+                            "__name__": true,
+                            "component": true,
+                            "instance": true,
+                            "job": true,
+                            "operation": true,
+                            "role": true,
+                            "target": true
+                        },
+                        "indexByName": {},
+                        "renameByName": {}
+                    }
+                }
+            ],
+            "type": "table"
         },
         {
             "datasource": "Prometheus",
@@ -702,7 +787,7 @@
                 "h": 13,
                 "w": 24,
                 "x": 0,
-                "y": 59
+                "y": 47
             },
             "id": 46,
             "options": {
@@ -804,7 +889,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 0,
-                "y": 72
+                "y": 60
             },
             "id": 47,
             "options": {
@@ -856,7 +941,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 12,
-                "y": 72
+                "y": 60
             },
             "hiddenSeries": false,
             "id": 50,
@@ -977,7 +1062,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 88
+                "y": 76
             },
             "hiddenSeries": false,
             "id": 52,
@@ -1089,7 +1174,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 88
+                "y": 76
             },
             "hiddenSeries": false,
             "id": 4,
@@ -1201,7 +1286,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 100
+                "y": 88
             },
             "hiddenSeries": false,
             "id": 14,
@@ -1338,7 +1423,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 100
+                "y": 88
             },
             "hiddenSeries": false,
             "id": 53,
@@ -1491,7 +1576,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 112
+                "y": 100
             },
             "id": 40,
             "options": {
@@ -1549,7 +1634,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 112
+                "y": 100
             },
             "id": 41,
             "options": {
@@ -1607,7 +1692,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 120
+                "y": 108
             },
             "id": 36,
             "options": {
@@ -1665,7 +1750,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 120
+                "y": 108
             },
             "id": 37,
             "options": {
@@ -1723,7 +1808,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 128
+                "y": 116
             },
             "id": 7,
             "links": [],
@@ -1787,7 +1872,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 128
+                "y": 116
             },
             "id": 2,
             "links": [],
@@ -1851,7 +1936,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 140
+                "y": 128
             },
             "id": 54,
             "links": [],
@@ -1915,7 +2000,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 140
+                "y": 128
             },
             "id": 55,
             "links": [],
@@ -1963,7 +2048,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 152
+                "y": 140
             },
             "hiddenSeries": false,
             "id": 17,
@@ -2079,7 +2164,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 152
+                "y": 140
             },
             "hiddenSeries": false,
             "id": 51,
@@ -2191,7 +2276,7 @@
                     },
                     "custom": {
                         "align": "center",
-                        "displayMode": "auto"
+                        "displayMode": "color-text"
                     },
                     "mappings": [],
                     "thresholds": {
@@ -2215,7 +2300,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 162
+                "y": 150
             },
             "id": 57,
             "options": {
@@ -2247,7 +2332,10 @@
                             "target": true
                         },
                         "indexByName": {},
-                        "renameByName": {}
+                        "renameByName": {
+                            "Value": "health",
+                            "instance": "node"
+                        }
                     }
                 }
             ],
@@ -2262,7 +2350,7 @@
                     },
                     "custom": {
                         "align": "center",
-                        "displayMode": "auto",
+                        "displayMode": "color-text",
                         "filterable": false
                     },
                     "mappings": [],
@@ -2287,7 +2375,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 162
+                "y": 150
             },
             "id": 59,
             "options": {
@@ -2320,7 +2408,10 @@
                             "target": true
                         },
                         "indexByName": {},
-                        "renameByName": {}
+                        "renameByName": {
+                            "Value": "degraded",
+                            "instance": "node"
+                        }
                     }
                 }
             ],
@@ -2400,7 +2491,7 @@
         ]
     },
     "time": {
-        "from": "now-1h",
+        "from": "now-5m",
         "to": "now"
     },
     "timepicker": {
@@ -2429,5 +2520,5 @@
     "timezone": "browser",
     "title": "Lustre Overview New",
     "uid": "HPA5L-wii",
-    "version": 43
+    "version": 50
 }
