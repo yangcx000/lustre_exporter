@@ -23,7 +23,7 @@
     "gnetId": 9658,
     "graphTooltip": 0,
     "id": 1002,
-    "iteration": 1657276388148,
+    "iteration": 1657798695419,
     "links": [],
     "liveNow": false,
     "panels": [
@@ -224,6 +224,91 @@
             "type": "gauge"
         },
         {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "custom": {
+                        "axisLabel": "",
+                        "axisPlacement": "auto",
+                        "barAlignment": 0,
+                        "drawStyle": "line",
+                        "fillOpacity": 0,
+                        "gradientMode": "none",
+                        "hideFrom": {
+                            "legend": false,
+                            "tooltip": false,
+                            "viz": false
+                        },
+                        "lineInterpolation": "smooth",
+                        "lineStyle": {
+                            "fill": "solid"
+                        },
+                        "lineWidth": 3,
+                        "pointSize": 5,
+                        "scaleDistribution": {
+                            "type": "linear"
+                        },
+                        "showPoints": "auto",
+                        "spanNulls": false,
+                        "stacking": {
+                            "group": "A",
+                            "mode": "none"
+                        },
+                        "thresholdsStyle": {
+                            "mode": "off"
+                        }
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "kbytes"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 10,
+                "w": 24,
+                "x": 0,
+                "y": 14
+            },
+            "id": 64,
+            "options": {
+                "legend": {
+                    "calcs": [],
+                    "displayMode": "list",
+                    "placement": "bottom"
+                },
+                "tooltip": {
+                    "mode": "single"
+                }
+            },
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "sum(lustre_capacity_kilobytes{target=~\"$fs.OST.*\"}) - sum(lustre_free_kilobytes{target=~\"$fs.OST.*\"})",
+                    "interval": "",
+                    "legendFormat": "capacity used",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filesystem capacity used",
+            "type": "timeseries"
+        },
+        {
             "aliasColors": {},
             "bars": false,
             "dashLength": 10,
@@ -236,7 +321,7 @@
                 "h": 14,
                 "w": 24,
                 "x": 0,
-                "y": 14
+                "y": 24
             },
             "hiddenSeries": false,
             "id": 12,
@@ -352,10 +437,10 @@
             "fill": 3,
             "fillGradient": 0,
             "gridPos": {
-                "h": 11,
+                "h": 14,
                 "w": 12,
                 "x": 0,
-                "y": 28
+                "y": 38
             },
             "hiddenSeries": false,
             "id": 3,
@@ -471,10 +556,10 @@
             "fill": 1,
             "fillGradient": 0,
             "gridPos": {
-                "h": 11,
+                "h": 14,
                 "w": 12,
                 "x": 12,
-                "y": 28
+                "y": 38
             },
             "hiddenSeries": false,
             "id": 16,
@@ -611,7 +696,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 39
+                "y": 52
             },
             "id": 61,
             "options": {
@@ -683,7 +768,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 39
+                "y": 52
             },
             "id": 62,
             "options": {
@@ -787,7 +872,7 @@
                 "h": 13,
                 "w": 24,
                 "x": 0,
-                "y": 47
+                "y": 60
             },
             "id": 46,
             "options": {
@@ -889,7 +974,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 0,
-                "y": 60
+                "y": 73
             },
             "id": 47,
             "options": {
@@ -941,7 +1026,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 12,
-                "y": 60
+                "y": 73
             },
             "hiddenSeries": false,
             "id": 50,
@@ -1062,7 +1147,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 76
+                "y": 89
             },
             "hiddenSeries": false,
             "id": 52,
@@ -1174,7 +1259,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 76
+                "y": 89
             },
             "hiddenSeries": false,
             "id": 4,
@@ -1286,7 +1371,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 88
+                "y": 101
             },
             "hiddenSeries": false,
             "id": 14,
@@ -1423,7 +1508,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 88
+                "y": 101
             },
             "hiddenSeries": false,
             "id": 53,
@@ -1576,7 +1661,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 100
+                "y": 113
             },
             "id": 40,
             "options": {
@@ -1634,7 +1719,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 100
+                "y": 113
             },
             "id": 41,
             "options": {
@@ -1692,7 +1777,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 108
+                "y": 121
             },
             "id": 36,
             "options": {
@@ -1750,7 +1835,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 108
+                "y": 121
             },
             "id": 37,
             "options": {
@@ -1808,7 +1893,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 116
+                "y": 129
             },
             "id": 7,
             "links": [],
@@ -1872,7 +1957,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 116
+                "y": 129
             },
             "id": 2,
             "links": [],
@@ -1936,7 +2021,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 128
+                "y": 141
             },
             "id": 54,
             "links": [],
@@ -2000,7 +2085,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 128
+                "y": 141
             },
             "id": 55,
             "links": [],
@@ -2048,7 +2133,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 140
+                "y": 153
             },
             "hiddenSeries": false,
             "id": 17,
@@ -2164,7 +2249,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 140
+                "y": 153
             },
             "hiddenSeries": false,
             "id": 51,
@@ -2300,7 +2385,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 150
+                "y": 163
             },
             "id": 57,
             "options": {
@@ -2375,7 +2460,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 150
+                "y": 163
             },
             "id": 59,
             "options": {
@@ -2491,7 +2576,7 @@
         ]
     },
     "time": {
-        "from": "now-5m",
+        "from": "now-6h",
         "to": "now"
     },
     "timepicker": {
@@ -2520,5 +2605,5 @@
     "timezone": "browser",
     "title": "Lustre Overview New",
     "uid": "HPA5L-wii",
-    "version": 50
+    "version": 54
 }
