@@ -394,6 +394,10 @@ func (s *lustreProcFsSource) Update(ch chan<- prometheus.Metric) (err error) {
 					if err != nil {
 						return err
 					}
+					if clientIP == "0" {
+						// ignore "0@lo"
+						continue
+					}
 				}
 				err = s.parseFile(metric.source, metricType, path, directoryDepth, metric.helpText, metric.promName, metric.hasMultipleVals, func(nodeType string, nodeName string, name string, helpText string, value float64, extraLabel string, extraLabelValue string) {
 					labels := []string{"component", "target"}
