@@ -67,6 +67,8 @@ func gaugeMetric(labels []string, labelValues []string, name string, helpText st
 	)
 }
 
+/*
+// XXX(yangchunxin): remove unused func
 func untypedMetric(labels []string, labelValues []string, name string, helpText string, value float64) prometheus.Metric {
 	return prometheus.MustNewConstMetric(
 		prometheus.NewDesc(
@@ -80,3 +82,4 @@ func untypedMetric(labels []string, labelValues []string, name string, helpText 
 		labelValues...,
 	)
 }
+*/
