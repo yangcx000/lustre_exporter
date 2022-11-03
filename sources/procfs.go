@@ -142,16 +142,15 @@ func (s *lustreProcFsSource) generateOSTMetricTemplates(filter string) {
 			{"tot_dirty", "exports_dirty_total", "Total number of exports that have been marked dirty", counterMetric, false, core},
 			{"tot_granted", "exports_granted_total", "Total number of exports that have been marked granted", counterMetric, false, core},
 			{"tot_pending", "exports_pending_total", "Total number of exports that have been marked pending", counterMetric, false, core},
-            // FIXME(yangchunxin): replace 'tcp' with '*' to support various net protocals
-			{"exports/*@tcp/stats", "client_read_samples_total", readSamplesHelp, counterMetric, false, core},
-			{"exports/*@tcp/stats", "client_read_minimum_size_bytes", readMinimumHelp, gaugeMetric, false, extended},
-			{"exports/*@tcp/stats", "client_read_maximum_size_bytes", readMaximumHelp, gaugeMetric, false, extended},
-			{"exports/*@tcp/stats", "client_read_bytes_total", readTotalHelp, counterMetric, false, core},
-			{"exports/*@tcp/stats", "client_write_samples_total", writeSamplesHelp, counterMetric, false, core},
-			{"exports/*@tcp/stats", "client_write_minimum_size_bytes", writeMinimumHelp, gaugeMetric, false, extended},
-			{"exports/*@tcp/stats", "client_write_maximum_size_bytes", writeMaximumHelp, gaugeMetric, false, extended},
-			{"exports/*@tcp/stats", "client_write_bytes_total", writeTotalHelp, counterMetric, false, core},
-			{"exports/*@tcp/stats", "client_stats_total", statsHelp, counterMetric, true, core},
+			{"exports/*@*/stats", "client_read_samples_total", readSamplesHelp, counterMetric, false, core},
+			{"exports/*@*/stats", "client_read_minimum_size_bytes", readMinimumHelp, gaugeMetric, false, extended},
+			{"exports/*@*/stats", "client_read_maximum_size_bytes", readMaximumHelp, gaugeMetric, false, extended},
+			{"exports/*@*/stats", "client_read_bytes_total", readTotalHelp, counterMetric, false, core},
+			{"exports/*@*/stats", "client_write_samples_total", writeSamplesHelp, counterMetric, false, core},
+			{"exports/*@*/stats", "client_write_minimum_size_bytes", writeMinimumHelp, gaugeMetric, false, extended},
+			{"exports/*@*/stats", "client_write_maximum_size_bytes", writeMaximumHelp, gaugeMetric, false, extended},
+			{"exports/*@*/stats", "client_write_bytes_total", writeTotalHelp, counterMetric, false, core},
+			{"exports/*@*/stats", "client_stats_total", statsHelp, counterMetric, true, core},
 		},
 		"osd-*/*-OST*": {
 			{"blocksize", "blocksize_bytes", "Filesystem block size in bytes", gaugeMetric, false, core},
@@ -191,8 +190,7 @@ func (s *lustreProcFsSource) generateMDTMetricTemplates(filter string) {
 			{mdStats, "stats_total", statsHelp, counterMetric, true, core},
 			{"num_exports", "exports_total", "Total number of times the pool has been exported", counterMetric, false, core},
 			{"job_stats", "job_stats_total", jobStatsHelp, counterMetric, true, core},
-            // FIXME(yangchunxin): replace 'tcp' with '*' to support various net protocals
-			{"exports/*@tcp/stats", "stats_total", statsHelp, counterMetric, true, core},
+			{"exports/*@*/stats", "client_stats_total", statsHelp, counterMetric, true, core},
 		},
 	}
 	for path := range metricMap {
@@ -395,6 +393,10 @@ func (s *lustreProcFsSource) Update(ch chan<- prometheus.Metric) (err error) {
 					clientIP, err = parseClientIP(path)
 					if err != nil {
 						return err
+					}
+					if clientIP == "0" {
+						// ignore "0@lo"
+						continue
 					}
 				}
 				err = s.parseFile(metric.source, metricType, path, directoryDepth, metric.helpText, metric.promName, metric.hasMultipleVals, func(nodeType string, nodeName string, name string, helpText string, value float64, extraLabel string, extraLabelValue string) {

@@ -18,12 +18,13 @@
             }
         ]
     },
+    "description": "",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "gnetId": 9658,
     "graphTooltip": 0,
     "id": 1002,
-    "iteration": 1657798695419,
+    "iteration": 1664453838280,
     "links": [],
     "liveNow": false,
     "panels": [
@@ -362,7 +363,7 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "-sum(rate(lustre_read_bytes_total{target=~\"$fs-OST.*\"}[2m])) by (job)",
+                    "expr": "-sum(rate(lustre_read_bytes_total{target=~\"$fs-OST.*\"}[2m]))",
                     "format": "time_series",
                     "instant": false,
                     "interval": "",
@@ -373,7 +374,7 @@
                 },
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_write_bytes_total{target=~\"$fs-OST.*\"}[2m])) by (job)",
+                    "expr": "sum(rate(lustre_write_bytes_total{target=~\"$fs-OST.*\"}[2m])) ",
                     "format": "time_series",
                     "interval": "",
                     "intervalFactor": 2,
@@ -438,7 +439,7 @@
             "fillGradient": 0,
             "gridPos": {
                 "h": 14,
-                "w": 12,
+                "w": 24,
                 "x": 0,
                 "y": 38
             },
@@ -482,7 +483,7 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_write_samples_total{target=~\"$fs-OST.*\"}[2m])) by (job)",
+                    "expr": "sum(rate(lustre_write_samples_total{target=~\"$fs-OST.*\"}[2m])) ",
                     "format": "time_series",
                     "hide": false,
                     "interval": "",
@@ -493,7 +494,7 @@
                 },
                 {
                     "exemplar": true,
-                    "expr": "-sum(rate(lustre_read_samples_total{target=~\"$fs-OST.*\"}[2m])) by (job)",
+                    "expr": "-sum(rate(lustre_read_samples_total{target=~\"$fs-OST.*\"}[2m])) ",
                     "format": "time_series",
                     "hide": false,
                     "interval": "",
@@ -557,9 +558,9 @@
             "fillGradient": 0,
             "gridPos": {
                 "h": 14,
-                "w": 12,
-                "x": 12,
-                "y": 38
+                "w": 24,
+                "x": 0,
+                "y": 52
             },
             "hiddenSeries": false,
             "id": 16,
@@ -604,8 +605,9 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\",client=\"\"}[2m])) by (operation)",
+                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\"}[2m])) by (operation)",
                     "format": "time_series",
+                    "hide": false,
                     "interval": "",
                     "intervalFactor": 2,
                     "legendFormat": "{{operation}}",
@@ -614,8 +616,9 @@
                 },
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\",client=\"\"}[2m]))",
+                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\"}[2m]))",
                     "format": "time_series",
+                    "hide": false,
                     "interval": "",
                     "intervalFactor": 2,
                     "legendFormat": "AGGREGATE",
@@ -696,7 +699,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 0,
-                "y": 52
+                "y": 66
             },
             "id": 61,
             "options": {
@@ -716,19 +719,11 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "count(count by(client) (lustre_client_stats_total))",
+                    "expr": "count(count by(client) (lustre_client_stats_total{target=~\"$fs.*\"}))",
                     "hide": false,
                     "interval": "",
                     "legendFormat": "",
                     "refId": "A"
-                },
-                {
-                    "exemplar": true,
-                    "expr": "lustre_client_stats_total",
-                    "hide": true,
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "B"
                 }
             ],
             "title": "Clients",
@@ -768,7 +763,7 @@
                 "h": 8,
                 "w": 12,
                 "x": 12,
-                "y": 52
+                "y": 66
             },
             "id": 62,
             "options": {
@@ -778,7 +773,7 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "group by(client)(lustre_client_stats_total)",
+                    "expr": "group by(client)(lustre_client_stats_total{target=~\"$fs.*\"})",
                     "format": "table",
                     "hide": false,
                     "instant": true,
@@ -872,7 +867,7 @@
                 "h": 13,
                 "w": 24,
                 "x": 0,
-                "y": 60
+                "y": 74
             },
             "id": 46,
             "options": {
@@ -974,7 +969,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 0,
-                "y": 73
+                "y": 87
             },
             "id": 47,
             "options": {
@@ -1026,7 +1021,7 @@
                 "h": 16,
                 "w": 12,
                 "x": 12,
-                "y": 73
+                "y": 87
             },
             "hiddenSeries": false,
             "id": 50,
@@ -1070,7 +1065,7 @@
             "targets": [
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\",client=~\".+\"}[2m])) by (client,operation)",
+                    "expr": "sum(rate(lustre_client_stats_total{target=~\"$fs-MDT.*\"}[2m])) by (client,operation)",
                     "format": "time_series",
                     "hide": true,
                     "interval": "",
@@ -1081,12 +1076,12 @@
                 },
                 {
                     "exemplar": true,
-                    "expr": "sum(rate(lustre_stats_total{target=~\"$fs-MDT.*\",client=~\".+\"}[2m]))by (client)",
+                    "expr": "sum(rate(lustre_client_stats_total{target=~\"$fs-MDT.*\"}[2m]))by (client)",
                     "format": "time_series",
                     "hide": false,
                     "interval": "",
                     "intervalFactor": 2,
-                    "legendFormat": "{{client}}",
+                    "legendFormat": "",
                     "refId": "B",
                     "step": 40
                 }
@@ -1101,6 +1096,7 @@
                 "sort": 2,
                 "value_type": "individual"
             },
+            "transformations": [],
             "type": "graph",
             "xaxis": {
                 "buckets": null,
@@ -1147,7 +1143,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 89
+                "y": 103
             },
             "hiddenSeries": false,
             "id": 52,
@@ -1259,7 +1255,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 89
+                "y": 103
             },
             "hiddenSeries": false,
             "id": 4,
@@ -1371,7 +1367,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 0,
-                "y": 101
+                "y": 115
             },
             "hiddenSeries": false,
             "id": 14,
@@ -1425,7 +1421,7 @@
                     "hide": false,
                     "interval": "",
                     "intervalFactor": 2,
-                    "legendFormat": "{{target}}-write-iops",
+                    "legendFormat": "{{target}}-write",
                     "refId": "A",
                     "step": 40
                 },
@@ -1436,7 +1432,7 @@
                     "hide": false,
                     "interval": "",
                     "intervalFactor": 2,
-                    "legendFormat": "{{target}}-read-iops",
+                    "legendFormat": "{{target}}-read",
                     "refId": "B",
                     "step": 40
                 },
@@ -1508,7 +1504,7 @@
                 "h": 12,
                 "w": 12,
                 "x": 12,
-                "y": 101
+                "y": 115
             },
             "hiddenSeries": false,
             "id": 53,
@@ -1633,494 +1629,6 @@
             }
         },
         {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "percentage",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 113
-            },
-            "id": 40,
-            "options": {
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-OST.*\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                }
-            ],
-            "title": "Filesystem ost inodes",
-            "type": "gauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "percentage",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 113
-            },
-            "id": 41,
-            "options": {
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-OST.*\"}) - sum(lustre_inodes_free{target=~\"$fs-OST.*\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                }
-            ],
-            "title": "Filesystem ost inodes used",
-            "type": "gauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "percentage",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 0,
-                "y": 121
-            },
-            "id": 36,
-            "options": {
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-MDT.*\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                }
-            ],
-            "title": "Filesystem mdt inodes",
-            "type": "gauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "thresholds"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "percentage",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "short"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 8,
-                "w": 12,
-                "x": 12,
-                "y": 121
-            },
-            "id": 37,
-            "options": {
-                "orientation": "auto",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showThresholdLabels": false,
-                "showThresholdMarkers": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-MDT.*\"}) - sum(lustre_inodes_free{target=~\"$fs-MDT.*\"})",
-                    "interval": "",
-                    "legendFormat": "",
-                    "refId": "A"
-                }
-            ],
-            "title": "Filesystem mdt inodes used",
-            "type": "gauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "percentunit"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 12,
-                "w": 12,
-                "x": 0,
-                "y": 129
-            },
-            "id": 7,
-            "links": [],
-            "options": {
-                "displayMode": "gradient",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showUnfilled": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "1-(lustre_free_kilobytes{target=~\"$fs-OST.*\"}/lustre_capacity_kilobytes{target=~\"$fs-OST.*\"})",
-                    "format": "time_series",
-                    "interval": "",
-                    "intervalFactor": 2,
-                    "legendFormat": "{{target}}",
-                    "refId": "A",
-                    "step": 40
-                }
-            ],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Capacity usage per ost",
-            "type": "bargauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "percentunit"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 12,
-                "w": 12,
-                "x": 12,
-                "y": 129
-            },
-            "id": 2,
-            "links": [],
-            "options": {
-                "displayMode": "gradient",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showUnfilled": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "1 - (lustre_inodes_free{target=~\"$fs-OST.*\"}/lustre_inodes_maximum{target=~\"$fs-OST.*\"})",
-                    "format": "time_series",
-                    "interval": "",
-                    "intervalFactor": 2,
-                    "legendFormat": "{{target}}",
-                    "refId": "A",
-                    "step": 40
-                }
-            ],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Inodes usage per ost",
-            "type": "bargauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "percentunit"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 12,
-                "w": 12,
-                "x": 0,
-                "y": 141
-            },
-            "id": 54,
-            "links": [],
-            "options": {
-                "displayMode": "gradient",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showUnfilled": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "1-(lustre_free_kilobytes{target=~\"$fs-MDT.*\"}/lustre_capacity_kilobytes{target=~\"$fs-MDT.*\"})",
-                    "format": "time_series",
-                    "interval": "",
-                    "intervalFactor": 2,
-                    "legendFormat": "{{target}}",
-                    "refId": "A",
-                    "step": 40
-                }
-            ],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Capacity usage per mdt",
-            "type": "bargauge"
-        },
-        {
-            "datasource": "Prometheus",
-            "fieldConfig": {
-                "defaults": {
-                    "color": {
-                        "mode": "palette-classic"
-                    },
-                    "mappings": [],
-                    "thresholds": {
-                        "mode": "absolute",
-                        "steps": [
-                            {
-                                "color": "green",
-                                "value": null
-                            },
-                            {
-                                "color": "red",
-                                "value": 80
-                            }
-                        ]
-                    },
-                    "unit": "percentunit"
-                },
-                "overrides": []
-            },
-            "gridPos": {
-                "h": 12,
-                "w": 12,
-                "x": 12,
-                "y": 141
-            },
-            "id": 55,
-            "links": [],
-            "options": {
-                "displayMode": "gradient",
-                "orientation": "horizontal",
-                "reduceOptions": {
-                    "calcs": [
-                        "lastNotNull"
-                    ],
-                    "fields": "",
-                    "values": false
-                },
-                "showUnfilled": true,
-                "text": {}
-            },
-            "pluginVersion": "8.2.7",
-            "targets": [
-                {
-                    "exemplar": true,
-                    "expr": "1 - (lustre_inodes_free{target=~\"$fs-MDT.*\"}/lustre_inodes_maximum{target=~\"$fs-MDT.*\"})",
-                    "format": "time_series",
-                    "interval": "",
-                    "intervalFactor": 2,
-                    "legendFormat": "{{target}}",
-                    "refId": "A",
-                    "step": 40
-                }
-            ],
-            "timeFrom": null,
-            "timeShift": null,
-            "title": "Inodes usage per mdt",
-            "type": "bargauge"
-        },
-        {
             "aliasColors": {},
             "bars": false,
             "dashLength": 10,
@@ -2133,7 +1641,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 0,
-                "y": 153
+                "y": 127
             },
             "hiddenSeries": false,
             "id": 17,
@@ -2249,7 +1757,7 @@
                 "h": 10,
                 "w": 12,
                 "x": 12,
-                "y": 153
+                "y": 127
             },
             "hiddenSeries": false,
             "id": 51,
@@ -2357,6 +1865,494 @@
             "fieldConfig": {
                 "defaults": {
                     "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 137
+            },
+            "id": 40,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-OST.*\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filesystem ost inodes",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 137
+            },
+            "id": 41,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-OST.*\"}) - sum(lustre_inodes_free{target=~\"$fs-OST.*\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filesystem ost inodes used",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 0,
+                "y": 145
+            },
+            "id": 36,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-MDT.*\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filesystem mdt inodes",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "thresholds"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "percentage",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "short"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 8,
+                "w": 12,
+                "x": 12,
+                "y": 145
+            },
+            "id": 37,
+            "options": {
+                "orientation": "auto",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showThresholdLabels": false,
+                "showThresholdMarkers": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "sum(lustre_inodes_maximum{target=~\"$fs-MDT.*\"}) - sum(lustre_inodes_free{target=~\"$fs-MDT.*\"})",
+                    "interval": "",
+                    "legendFormat": "",
+                    "refId": "A"
+                }
+            ],
+            "title": "Filesystem mdt inodes used",
+            "type": "gauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 12,
+                "x": 0,
+                "y": 153
+            },
+            "id": 7,
+            "links": [],
+            "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "1-(lustre_free_kilobytes{target=~\"$fs-OST.*\"}/lustre_capacity_kilobytes{target=~\"$fs-OST.*\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{target}}",
+                    "refId": "A",
+                    "step": 40
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Capacity usage per ost",
+            "type": "bargauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 12,
+                "x": 12,
+                "y": 153
+            },
+            "id": 2,
+            "links": [],
+            "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "1 - (lustre_inodes_free{target=~\"$fs-OST.*\"}/lustre_inodes_maximum{target=~\"$fs-OST.*\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{target}}",
+                    "refId": "A",
+                    "step": 40
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Inodes usage per ost",
+            "type": "bargauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 12,
+                "x": 0,
+                "y": 165
+            },
+            "id": 54,
+            "links": [],
+            "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "1-(lustre_free_kilobytes{target=~\"$fs-MDT.*\"}/lustre_capacity_kilobytes{target=~\"$fs-MDT.*\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{target}}",
+                    "refId": "A",
+                    "step": 40
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Capacity usage per mdt",
+            "type": "bargauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
+                        "mode": "palette-classic"
+                    },
+                    "mappings": [],
+                    "thresholds": {
+                        "mode": "absolute",
+                        "steps": [
+                            {
+                                "color": "green",
+                                "value": null
+                            },
+                            {
+                                "color": "red",
+                                "value": 80
+                            }
+                        ]
+                    },
+                    "unit": "percentunit"
+                },
+                "overrides": []
+            },
+            "gridPos": {
+                "h": 12,
+                "w": 12,
+                "x": 12,
+                "y": 165
+            },
+            "id": 55,
+            "links": [],
+            "options": {
+                "displayMode": "gradient",
+                "orientation": "horizontal",
+                "reduceOptions": {
+                    "calcs": [
+                        "lastNotNull"
+                    ],
+                    "fields": "",
+                    "values": false
+                },
+                "showUnfilled": true,
+                "text": {}
+            },
+            "pluginVersion": "8.2.7",
+            "targets": [
+                {
+                    "exemplar": true,
+                    "expr": "1 - (lustre_inodes_free{target=~\"$fs-MDT.*\"}/lustre_inodes_maximum{target=~\"$fs-MDT.*\"})",
+                    "format": "time_series",
+                    "interval": "",
+                    "intervalFactor": 2,
+                    "legendFormat": "{{target}}",
+                    "refId": "A",
+                    "step": 40
+                }
+            ],
+            "timeFrom": null,
+            "timeShift": null,
+            "title": "Inodes usage per mdt",
+            "type": "bargauge"
+        },
+        {
+            "datasource": "Prometheus",
+            "fieldConfig": {
+                "defaults": {
+                    "color": {
                         "mode": "palette-classic"
                     },
                     "custom": {
@@ -2385,7 +2381,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 0,
-                "y": 163
+                "y": 177
             },
             "id": 57,
             "options": {
@@ -2397,6 +2393,7 @@
                     "exemplar": true,
                     "expr": "lustre_health_check",
                     "format": "table",
+                    "hide": false,
                     "instant": true,
                     "interval": "",
                     "legendFormat": "",
@@ -2460,7 +2457,7 @@
                 "h": 7,
                 "w": 12,
                 "x": 12,
-                "y": 163
+                "y": 177
             },
             "id": 59,
             "options": {
@@ -2513,8 +2510,12 @@
                 "allValue": "",
                 "current": {
                     "selected": false,
-                    "text": "All",
-                    "value": "$__all"
+                    "text": [
+                        "All"
+                    ],
+                    "value": [
+                        "$__all"
+                    ]
                 },
                 "datasource": "Prometheus",
                 "definition": "label_values(lustre_stats_total,instance)",
@@ -2533,7 +2534,7 @@
                 "refresh": 1,
                 "regex": "/(.*):/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 1,
                 "tagValuesQuery": "",
                 "tagsQuery": "",
                 "type": "query",
@@ -2542,12 +2543,12 @@
             {
                 "allValue": null,
                 "current": {
-                    "selected": true,
+                    "selected": false,
                     "text": [
-                        "pangufs"
+                        "cyprefs"
                     ],
                     "value": [
-                        "pangufs"
+                        "cyprefs"
                     ]
                 },
                 "datasource": "Prometheus",
@@ -2567,7 +2568,7 @@
                 "refresh": 1,
                 "regex": "/(.*)-MDT/",
                 "skipUrlSync": false,
-                "sort": 0,
+                "sort": 1,
                 "tagValuesQuery": "",
                 "tagsQuery": "",
                 "type": "query",
@@ -2576,10 +2577,11 @@
         ]
     },
     "time": {
-        "from": "now-6h",
+        "from": "now-1h",
         "to": "now"
     },
     "timepicker": {
+        "hidden": false,
         "refresh_intervals": [
             "1m",
             "2m",
@@ -2603,7 +2605,7 @@
         ]
     },
     "timezone": "browser",
-    "title": "Lustre Overview New",
+    "title": "Lustre-Clustre-Overview",
     "uid": "HPA5L-wii",
-    "version": 54
+    "version": 76
 }

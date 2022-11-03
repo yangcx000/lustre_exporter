@@ -163,14 +163,14 @@ func main() {
 	sources.HealthStatusEnabled = *healthStatusEnabled
 	log.Infof(" - Health State: %s", sources.HealthStatusEnabled)
 
-	enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
+	// XXX(yangchunxin): without "lctl" source
+	//enabledSources := []string{"procfs", "procsys", "sysfs", "lctl"}
+	enabledSources := []string{"procfs", "procsys", "sysfs"}
 
 	sourceList, errList := loadSources(enabledSources)
 
-	if errList != nil {
-		for _, err := range errList {
-			log.Errorf("Couldn't load source: %s", err)
-		}
+	for _, err := range errList {
+		log.Errorf("Couldn't load source: %s", err)
 	}
 
 	log.Infof("Available sources:")
